@@ -5,7 +5,7 @@
 export const GITHUB_CONFIG = {
   clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "",
   clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-  redirectUri: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/callback`,
+  redirectUri: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5555"}/auth/github/callback`,
   scope: "user:email read:org",
 };
 
