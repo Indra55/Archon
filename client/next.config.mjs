@@ -10,7 +10,7 @@ const nextConfig = {
     return [
       {
         source: '/api/knowledge/:path*',
-        destination: 'http://localhost:5555/knowledge/:path*',
+        destination: 'https://spit-hackathon-o4kf.onrender.com/knowledge/:path*',
       },
     ]
   },
