@@ -1,5 +1,6 @@
 /**
  * GitHub OAuth configuration and utilities
+ * Updated: 2025-02-22 - Fixed redirect URI for production
  */
 
 export const GITHUB_CONFIG = {
