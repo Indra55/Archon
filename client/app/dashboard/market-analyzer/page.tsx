@@ -5,4 +5,3 @@ import { MarketAnalyzerPage } from '@/components/marketanalyzer/MarketAnalyzerPa
 export default function Page() {
     return <MarketAnalyzerPage />
 }
-client/components/marketanalyzer/DetectedServicesPanel.tsx
