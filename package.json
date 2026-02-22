@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@dagrejs/dagre": "github:dagrejs/dagre"
+  }
+}

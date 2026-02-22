@@ -1,0 +1,569 @@
+﻿python : INFO:kachow.core.v
+ector_store:  
+[VectorStore] Initializing 
+with connection: postgresql
++psycopg:****@dpg-d6cm3h75r
+7bs73ah7bn0-a.oregon-postgr
+es.render.com/spit_hacks
+At line:1 char:1
++ python test_pipeline.py 
+> full_pipeline_log.txt 
+2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecifi    ed: 
+(INFO:kachow.c    
+or....com/spit_hac    
+ks:String) [], Rem    
+oteException
+    + FullyQualifiedEr    
+rorId : NativeComm    
+andError
+ 
+INFO:kachow.core.vector_sto
+re:  [VectorStore] 
+Initializing with 
+connection: postgresql+psyc
+opg:****@dpg-d6cm3h75r7bs73
+ah7bn0-a.oregon-postgres.re
+nder.com/spit_hacks
+INFO:kachow.core.knowledge:
+\U0001f9e0 Processing 
+knowledge for: 
+src/auth/jwt_manager.py in 
+repo test_framework_repo
+INFO:kachow.core.llm:\U0001
+f916 LLM call (attempt 
+1/3, model=stepfun/step-3.5
+-flash:free)
+INFO:kachow.core.llm:\U0001
+f916 LLM call (attempt 
+1/3, model=stepfun/step-3.5
+-flash:free)
+INFO:kachow.core.llm:\U0001
+f916 LLM call (attempt 
+1/3, model=stepfun/step-3.5
+-flash:free)
+INFO:kachow.core.llm:\U0001
+f916 LLM call (attempt 
+1/3, model=stepfun/step-3.5
+-flash:free)
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/chat/completions 
+"HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/chat/completions 
+"HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/chat/completions 
+"HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/chat/completions 
+"HTTP/1.1 200 OK"
+INFO:kachow.core.knowledge:
+\u2728 Parsed 4 chunks, 
+enriched 4 for 
+src/auth/jwt_manager.py
+INFO:neo4j.notifications:Re
+ceived notification from 
+DBMS server: 
+<GqlStatusObject 
+gql_status='00NA0', 
+status_description="note: 
+successful completion - 
+index or constraint 
+already exists. The 
+command 'CREATE CONSTRAINT 
+base_node_uuid IF NOT 
+EXISTS FOR 
+(e:Test_BaseNode) REQUIRE 
+(e.uuid) IS UNIQUE' has no 
+effect. The index or 
+constraint specified by 
+'CONSTRAINT base_node_uuid 
+FOR (e:Test_BaseNode) 
+REQUIRE (e.uuid) IS 
+UNIQUE' already exists.", 
+position=None, raw_classifi
+cation='SCHEMA', classifica
+tion=<NotificationClassific
+ation.SCHEMA: 'SCHEMA'>, ra
+w_severity='INFORMATION', s
+everity=<NotificationSeveri
+ty.INFORMATION: 
+'INFORMATION'>, diagnostic_
+record={'_classification': 
+'SCHEMA', '_severity': 
+'INFORMATION', 
+'OPERATION': '', 
+'OPERATION_CODE': '0', 
+'CURRENT_SCHEMA': '/'}> 
+for query: 'CREATE 
+CONSTRAINT base_node_uuid 
+IF NOT EXISTS FOR 
+(n:Test_BaseNode) REQUIRE 
+n.uuid IS UNIQUE'
+INFO:neo4j.notifications:Re
+ceived notification from 
+DBMS server: 
+<GqlStatusObject 
+gql_status='00NA0', 
+status_description="note: 
+successful completion - 
+index or constraint 
+already exists. The 
+command 'CREATE RANGE 
+INDEX IF NOT EXISTS FOR 
+(e:Test_BaseNode) ON 
+(e.name)' has no effect. 
+The index or constraint 
+specified by 'RANGE INDEX 
+index_ff4d32ce FOR 
+(e:Test_BaseNode) ON 
+(e.name)' already 
+exists.", position=None, ra
+w_classification='SCHEMA', 
+classification=<Notificatio
+nClassification.SCHEMA: 
+'SCHEMA'>, raw_severity='IN
+FORMATION', severity=<Notif
+icationSeverity.INFORMATION
+: 'INFORMATION'>, diagnosti
+c_record={'_classification'
+: 'SCHEMA', '_severity': 
+'INFORMATION', 
+'OPERATION': '', 
+'OPERATION_CODE': '0', 
+'CURRENT_SCHEMA': '/'}> 
+for query: 'CREATE INDEX 
+IF NOT EXISTS FOR 
+(n:Test_BaseNode) ON 
+(n.name)'
+INFO:kachow.core.knowledge:
+  -> Upserting chunk 
+JWTManager to Neo4j...
+INFO:kachow.core.vector_sto
+re:  [VectorStore] Tables 
+already exist: 
+['kachow_test_code_v2', 
+'kachow_test_summaries_v2']
+INFO:kachow.core.vector_sto
+re:  [VectorStore] v2 
+VectorStores initialized 
+successfully.
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/embeddings 
+"HTTP/1.1 200 OK"
+ERROR:kachow.core.vector_st
+ore:Failed to upsert to 
+PGVector: (psycopg.errors.I
+nvalidTextRepresentation) 
+invalid input syntax for 
+type uuid: "59df0aa5615f752
+eb327b4a87b309ec62902e7069c
+446716f3488005a7d7af97"
+CONTEXT:  unnamed portal 
+parameter $1 = '...'
+[SQL: INSERT INTO "public".
+"kachow_test_code_v2"("lang
+chain_id", "content", 
+"embedding", "langchain_met
+adata")VALUES 
+(%(langchain_id)s, 
+%(content)s, 
+%(embedding)s, %(extra)s) 
+ON CONFLICT 
+("langchain_id") DO UPDATE 
+SET "content" = 
+EXCLUDED."content", 
+"embedding" = 
+EXCLUDED."embedding", 
+"langchain_metadata" = EXCL
+UDED."langchain_metadata";]
+[parameters: 
+{'langchain_id': '59df0aa56
+15f752eb327b4a87b309ec62902
+e7069c446716f3488005a7d7af9
+7', 'content': 'class 
+JWTManager:\n    def 
+__init__(self, secret: 
+str):\n        self.secret 
+= secret\n        
+self.expiry_time = 
+3600\n\n    def 
+generate_token(self ... 
+(314 characters truncated) 
+... g JWT token.\'\'\'\n   
+     parts = 
+token.split(\'.\')\n       
+ if len(parts) != 3:\n     
+       return False\n      
+  return parts[1] == 
+self.secret', 'embedding': 
+'[0.030170585960149765, 
+-0.015812555328011513, 
+0.006896999664604664, 
+0.018530583009123802, 
+0.05350030958652496, 
+-0.0024152500554919243, 
+0.053681563585 ... (16706 
+characters truncated) ... 
+170762211084366, 
+-0.007403968367725611, 
+0.007321829907596111, 
+0.016637317836284637, 
+0.011599129065871239, 
+-0.03952321037650108, 
+0.012487458996474743]', 
+'extra': '{"uuid": "59df0aa
+5615f752eb327b4a87b309ec629
+02e7069c446716f3488005a7d7a
+f97", "name": 
+"JWTManager", "type": 
+"class", "file_path": 
+"src/auth/jwt_manage ... 
+(26 characters truncated) 
+... "summary": "JWTManager 
+is a class that implements 
+a simplified JWT token 
+generation and 
+verification mechanism 
+using a shared secret and 
+timestamp."}'}]
+(Background on this error 
+at: https://sqlalche.me/e/2
+0/9h9h)
+INFO:kachow.core.knowledge:
+  -> Upserting chunk 
+__init__ to Neo4j...
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/embeddings 
+"HTTP/1.1 200 OK"
+ERROR:kachow.core.vector_st
+ore:Failed to upsert to 
+PGVector: (psycopg.errors.I
+nvalidTextRepresentation) 
+invalid input syntax for 
+type uuid: "b50aa168aefc164
+ca12bf48554256be22e1d9dbb07
+b82b01702ec448811bee2f"
+CONTEXT:  unnamed portal 
+parameter $1 = '...'
+[SQL: INSERT INTO "public".
+"kachow_test_code_v2"("lang
+chain_id", "content", 
+"embedding", "langchain_met
+adata")VALUES 
+(%(langchain_id)s, 
+%(content)s, 
+%(embedding)s, %(extra)s) 
+ON CONFLICT 
+("langchain_id") DO UPDATE 
+SET "content" = 
+EXCLUDED."content", 
+"embedding" = 
+EXCLUDED."embedding", 
+"langchain_metadata" = EXCL
+UDED."langchain_metadata";]
+[parameters: 
+{'langchain_id': 'b50aa168a
+efc164ca12bf48554256be22e1d
+9dbb07b82b01702ec448811bee2
+f', 'content': 'def 
+__init__(self, secret: 
+str):\n        self.secret 
+= secret\n        
+self.expiry_time = 3600', 
+'embedding': 
+'[0.04144793748855591, 
+0.012538881972432137, 
+0.011874465271830559, 
+0.0315820574760437, 
+0.06594935804605484, 
+0.013243445195257664, 
+0.042658593505620956 ... 
+(16706 characters 
+truncated) ... 
+41218423843384, 
+-0.022690363228321075, 
+-0.015809090808033943, 
+0.038253068923950195, 
+0.033214107155799866, 
+-0.039949387311935425, 
+0.05596252158284187]', 
+'extra': '{"uuid": "b50aa16
+8aefc164ca12bf48554256be22e
+1d9dbb07b82b01702ec448811be
+e2f", "name": "__init__", 
+"type": "function", 
+"file_path": 
+"src/auth/jwt_manag ... 
+(43 characters truncated) 
+... ry": "The JWTManager 
+class\'s __init__ method 
+initializes with a 
+provided secret key and 
+sets a default expiry time 
+of 3600 seconds for JWT 
+tokens."}'}]
+(Background on this error 
+at: https://sqlalche.me/e/2
+0/9h9h)
+INFO:kachow.core.knowledge:
+  -> Upserting chunk 
+generate_token to Neo4j...
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/embeddings 
+"HTTP/1.1 200 OK"
+ERROR:kachow.core.vector_st
+ore:Failed to upsert to 
+PGVector: (psycopg.errors.I
+nvalidTextRepresentation) 
+invalid input syntax for 
+type uuid: "5713ea75a454f70
+33df304ea9461aa1d3311712425
+55404fa497f7ed5cf800b9"
+CONTEXT:  unnamed portal 
+parameter $1 = '...'
+[SQL: INSERT INTO "public".
+"kachow_test_code_v2"("lang
+chain_id", "content", 
+"embedding", "langchain_met
+adata")VALUES 
+(%(langchain_id)s, 
+%(content)s, 
+%(embedding)s, %(extra)s) 
+ON CONFLICT 
+("langchain_id") DO UPDATE 
+SET "content" = 
+EXCLUDED."content", 
+"embedding" = 
+EXCLUDED."embedding", 
+"langchain_metadata" = EXCL
+UDED."langchain_metadata";]
+[parameters: 
+{'langchain_id': '5713ea75a
+454f7033df304ea9461aa1d3311
+71242555404fa497f7ed5cf800b
+9', 'content': 'def 
+generate_token(self, 
+user_id: int) -> str:\n    
+    \'\'\'Generates a JWT 
+token for the 
+user.\'\'\'\n        # 
+Dummy implementation 
+representing token 
+creation\n        
+timestamp = time.time()\n  
+      return f"{user_id}.{s
+elf.secret}.{timestamp}"', 
+'embedding': 
+'[0.008068904280662537, 
+-0.0024510424118489027, 
+-0.002415303373709321, 
+0.026777807623147964, 
+0.0456048846244812, 
+0.026759637519717216, 
+0.0377994142472 ... (16716 
+characters truncated) ... 
+0.03670155256986618, 
+0.011053181253373623, 
+0.02040216512978077, 
+0.01748204044997692, 
+0.01236905436962843, 
+-0.036703795194625854, 
+0.00661073112860322]', 
+'extra': '{"uuid": "5713ea7
+5a454f7033df304ea9461aa1d33
+1171242555404fa497f7ed5cf80
+0b9", "name": 
+"generate_token", "type": 
+"function", "file_path": 
+"src/auth/jwt ... (33 
+characters truncated) ... 
+Manager", "summary": "The 
+generate_token method in 
+JWTManager creates a dummy 
+JWT token string by 
+concatenating user_id, a 
+secret, and a 
+timestamp."}'}]
+(Background on this error 
+at: https://sqlalche.me/e/2
+0/9h9h)
+INFO:kachow.core.knowledge:
+  -> Upserting chunk 
+verify_token to Neo4j...
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/embeddings 
+"HTTP/1.1 200 OK"
+ERROR:kachow.core.vector_st
+ore:Failed to upsert to 
+PGVector: (psycopg.errors.I
+nvalidTextRepresentation) 
+invalid input syntax for 
+type uuid: "57844852ed74be6
+529eee63cfd5d53c37e7037220d
+43d077e781b30a6d5dc7af"
+CONTEXT:  unnamed portal 
+parameter $1 = '...'
+[SQL: INSERT INTO "public".
+"kachow_test_code_v2"("lang
+chain_id", "content", 
+"embedding", "langchain_met
+adata")VALUES 
+(%(langchain_id)s, 
+%(content)s, 
+%(embedding)s, %(extra)s) 
+ON CONFLICT 
+("langchain_id") DO UPDATE 
+SET "content" = 
+EXCLUDED."content", 
+"embedding" = 
+EXCLUDED."embedding", 
+"langchain_metadata" = EXCL
+UDED."langchain_metadata";]
+[parameters: 
+{'langchain_id': '57844852e
+d74be6529eee63cfd5d53c37e70
+37220d43d077e781b30a6d5dc7a
+f', 'content': "def 
+verify_token(self, token: 
+str) -> bool:\n        
+'''Verifies an incoming 
+JWT token.'''\n        
+parts = token.split('.')\n 
+       if len(parts) != 
+3:\n            return 
+False\n        return 
+parts[1] == self.secret", 
+'embedding': 
+'[0.01590748131275177, 
+0.0008725624065846205, 
+-0.004814667161554098, 
+0.005716972053050995, 
+0.04262516647577286, 
+0.030202869325876236, 
+0.06046949326992 ... 
+(16671 characters 
+truncated) ... 
+2568563222885, 
+-0.0026721148751676083, 
+0.0189055148512125, 
+0.001406027004122734, 
+0.00022983053349889815, 
+-0.041950713843107224, 
+0.006339289713650942]', 
+'extra': '{"uuid": "5784485
+2ed74be6529eee63cfd5d53c37e
+7037220d43d077e781b30a6d5dc
+7af", "name": 
+"verify_token", "type": 
+"function", "file_path": 
+"src/auth/jwt_m ... (135 
+characters truncated) ... 
+for three dot-separated 
+parts and comparing the 
+payload to a stored 
+secret, which is an 
+incorrect approach for 
+standard JWT signature 
+verification."}'}]
+(Background on this error 
+at: https://sqlalche.me/e/2
+0/9h9h)
+INFO:kachow.core.retriever:
+\U0001f50e STARTING 
+SEARCH: 'How do I create a 
+new user session string or 
+token?'
+INFO:kachow.core.retriever:
+  Vector Store: 
+Searching...
+INFO:kachow.core.vector_sto
+re:  [VectorStore] Tables 
+already exist: 
+['kachow_test_code_v2', 
+'kachow_test_summaries_v2']
+INFO:kachow.core.vector_sto
+re:  [VectorStore] Tables 
+already exist: 
+['kachow_test_code_v2', 
+'kachow_test_summaries_v2']
+INFO:kachow.core.vector_sto
+re:  [VectorStore] v2 
+VectorStores initialized 
+successfully.
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/embeddings 
+"HTTP/1.1 200 OK"
+INFO:kachow.core.vector_sto
+re:  [VectorStore] v2 
+VectorStores initialized 
+successfully.
+INFO:httpx:HTTP Request: 
+POST https://openrouter.ai/
+api/v1/embeddings 
+"HTTP/1.1 200 OK"
+INFO:kachow.core.retriever:
+\U0001f4ca Vector search 
+results ù Summary: 0, 
+Code: 0
+INFO:kachow.core.retriever:
+\U0001f4ca Initial 
+candidates count: 0
+INFO:kachow.core.retriever:
+  \u26a0\ufe0f Vector 
+results empty. Falling 
+back to Keyword Search in 
+Neo4j...
+INFO:kachow.core.retriever:
+  Extracted Keywords for 
+Fallback: ['create', 
+'new', 'user', 'session', 
+'string', 'token']
+INFO:kachow.core.retriever:
+\u2705 Keyword fallback 
+found 4 chunks: 
+['JWTManager', '__init__', 
+'generate_token', 
+'verify_token']
+INFO:kachow.core.retriever:
+\u2705 Returned 4 hybrid 
+results.
+Starting Living Knowledge Graph Test Pipeline
+
+1. Ingesting & Summarizing 'src/auth/jwt_manager.py' into PgVector & Neo4j...
+Ingestion Complete!
+
+2. Executing Hybrid Retrieval...
+    Query: 'How do I create a new user session string or token?'
+
+    Results Found:
+    - Score 0.6: [Function: JWTManager] in unknown
+      Summary: JWTManager is a class that implements a simplified JWT token generation and verification mechanism using a shared secret and timestamp.
+    - Score 0.6: [Function: __init__] in unknown
+      Summary: The JWTManager class's __init__ method initializes with a provided secret key and sets a default expiry time of 3600 seconds for JWT tokens.
+    - Score 0.6: [Function: generate_token] in unknown
+      Summary: The generate_token method in JWTManager creates a dummy JWT token string by concatenating user_id, a secret, and a timestamp.
+    - Score 0.6: [Function: verify_token] in unknown
+      Summary: The verify_token method in JWTManager attempts to validate JWT tokens by checking for three dot-separated parts and comparing the payload to a stored secret, which is an incorrect approach for standard JWT signature verification.
+
+3. Checking System Health (Drift & Coverage via AuraDB)...
+    - total_repositories: 1
+    - total_files: 1
+    - total_chunks: 5
+    - documentation_coverage_percent: 100.0
+    - drift_candidates: 0 candidates found.
+
+Pipeline Test Finished!

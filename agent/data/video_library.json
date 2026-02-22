@@ -1,0 +1,212 @@
+[
+  {
+    "id": "arch-system-design-101",
+    "topic": "System Design Basics",
+    "title": "System Design 101",
+    "description": "Fundamental concepts of scale, availability, and reliability in modern architecture.",
+    "type": "architecture",
+    "estimated_minutes": 20,
+    "recommended_videos": [
+      {
+        "title": "System Design Basics – What Every Engineer Should Know",
+        "youtube_id": "MbjObHmDbZo"
+      }
+    ]
+  },
+  {
+    "id": "arch-microservices-why",
+    "topic": "Microservices Architecture",
+    "title": "Microservices: The What, Why and How",
+    "description": "Understanding service boundaries, communication patterns, and distributed systems.",
+    "type": "architecture",
+    "estimated_minutes": 25,
+    "recommended_videos": [
+      {
+        "title": "Microservices Explained (Clear & Practical)",
+        "youtube_id": "C6p9A4pIYpA"
+      }
+    ]
+  },
+  {
+    "id": "code-clean-code-principles",
+    "topic": "Clean Code & Refactoring",
+    "title": "Clean Code Principles for Senior Engineers",
+    "description": "Best practices for writing maintainable, readable, and robust code.",
+    "type": "code",
+    "estimated_minutes": 30,
+    "recommended_videos": [
+      {
+        "title": "Clean Code – Uncle Bob (Foundational Principles)",
+        "youtube_id": "7EmboKQH8lM"
+      }
+    ]
+  },
+  {
+    "id": "ops-docker-crash-course",
+    "topic": "Docker & Containerization",
+    "title": "Docker Crash Course for Absolute Beginners",
+    "description": "Getting started with containers, images, and orchestration using Docker.",
+    "type": "operations",
+    "estimated_minutes": 40,
+    "recommended_videos": [
+      {
+        "title": "Docker in 100 Seconds",
+        "youtube_id": "Gjnup-PuquQ"
+      }
+    ]
+  },
+  {
+    "id": "arch-api-gateways",
+    "topic": "API Gateways & Routing",
+    "title": "Understanding API Gateways",
+    "description": "How to manage cross-cutting concerns like auth, rate limiting, and routing.",
+    "type": "architecture",
+    "estimated_minutes": 15,
+    "recommended_videos": [
+      {
+        "title": "API Gateway Explained (Why You Actually Need One)",
+        "youtube_id": "kJ1zq2p8K4A"
+      }
+    ]
+  },
+  {
+    "id": "fe-react-state-mgmt",
+    "topic": "React State Management",
+    "title": "Modern React State Management",
+    "description": "Choosing between Context API, Redux, and Zustand for stateful applications.",
+    "type": "code",
+    "estimated_minutes": 25,
+    "recommended_videos": [
+      {
+        "title": "State Management in React – The Right Way",
+        "youtube_id": "bKqB9YtFzEY"
+      }
+    ]
+  },
+  {
+    "id": "be-node-express-best-practices",
+    "topic": "Node.js & Express Best Practices",
+    "title": "Node.js Production-Ready Architecture",
+    "description": "Structuring Express apps for scalability, testability, and security.",
+    "type": "code",
+    "estimated_minutes": 20,
+    "recommended_videos": [
+      {
+        "title": "How to Structure a Node.js Project",
+        "youtube_id": "qJ5R9WTW0_E"
+      }
+    ]
+  },
+  {
+    "id": "db-sql-optimization",
+    "topic": "SQL Query Optimization",
+    "title": "Indexing and Query Performance",
+    "description": "How to write efficient SQL queries and optimize database indexing.",
+    "type": "operations",
+    "estimated_minutes": 20,
+    "recommended_videos": [
+      {
+        "title": "Database Indexing Explained (With Examples)",
+        "youtube_id": "fsG1XaZEa78"
+      }
+    ]
+  },
+  {
+    "id": "ops-kubernetes-overview",
+    "topic": "Kubernetes Architecture",
+    "title": "K8s: The Big Picture",
+    "description": "Understanding Pods, Services, Deployments, and the control plane.",
+    "type": "operations",
+    "estimated_minutes": 45,
+    "recommended_videos": [
+      {
+        "title": "Kubernetes Architecture Explained Clearly",
+        "youtube_id": "umXEmn3cMWY"
+      }
+    ]
+  },
+  {
+    "id": "code-unit-testing-guide",
+    "topic": "Unit Testing & TDD",
+    "title": "Effective Unit Testing Strategies",
+    "description": "Writing tests that actually catch bugs and enable fearless refactoring.",
+    "type": "code",
+    "estimated_minutes": 20,
+    "recommended_videos": [
+      {
+        "title": "Unit Testing Best Practices (That Actually Work)",
+        "youtube_id": "hA5K0F6N8xU"
+      }
+    ]
+  },
+  {
+    "id": "sec-web-security-top-10",
+    "topic": "Web Security & OWASP",
+    "title": "OWASP Top 10 for Developers",
+    "description": "Securing your applications against common vulnerabilities like XSS and Injection.",
+    "type": "operations",
+    "estimated_minutes": 30,
+    "recommended_videos": [
+      {
+        "title": "OWASP Top 10 – Practical Developer Guide",
+        "youtube_id": "0W7qH3QKz4E"
+      }
+    ]
+  },
+  {
+    "id": "arch-event-driven",
+    "topic": "Event-Driven Architecture",
+    "title": "Async Messaging & Event Streams",
+    "description": "Using Kafka or RabbitMQ for decoupled, asynchronous communication.",
+    "type": "architecture",
+    "estimated_minutes": 25,
+    "recommended_videos": [
+      {
+        "title": "Event-Driven Architecture – Explained Simply",
+        "youtube_id": "STKCRSUsyP0"
+      }
+    ]
+  },
+  {
+    "id": "be-rest-vs-graphql",
+    "topic": "REST vs GraphQL",
+    "title": "Choosing the Right API Paradigm",
+    "description": "Trade-offs between traditional REST APIs and modern GraphQL schemas.",
+    "type": "architecture",
+    "estimated_minutes": 15,
+    "recommended_videos": [
+      {
+        "title": "REST vs GraphQL – When to Use What",
+        "youtube_id": "PeAOEAmR0IY"
+      }
+    ]
+  },
+  {
+    "id": "ops-cicd-pipeline-design",
+    "topic": "CI/CD Pipeline Design",
+    "title": "Building Robust CI/CD Workflows",
+    "description": "Automating testing, build, and deployment with GitHub Actions.",
+    "type": "operations",
+    "estimated_minutes": 20,
+    "recommended_videos": [
+      {
+        "title": "CI/CD Explained Like You're a Senior Engineer",
+        "youtube_id": "42UP1fxi2SY"
+      }
+    ]
+  },
+  {
+    "id": "fe-nextjs-app-router",
+    "topic": "Next.js App Router",
+    "title": "Mastering Next.js 14 App Router",
+    "description": "Server Components, Suspense, and optimistic UI updates.",
+    "type": "code",
+    "estimated_minutes": 35,
+    "recommended_videos": [
+      {
+        "title": "Next.js App Router – Real Mental Model",
+        "youtube_id": "ZVnjOPwW4ZA"
+      }
+    ]
+  }
+]
