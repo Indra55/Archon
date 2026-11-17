@@ -17,7 +17,7 @@ from agent.core.state import (
 )
 from agent.prompts.architecture import ARCHITECTURE_DESIGN_PROMPT
 
-logger = logging.getLogger("kachow.agents.architect")
+logger = logging.getLogger("archon.agents.architect")
 
 
 async def design_architecture(state: dict[str, Any]) -> dict[str, Any]:

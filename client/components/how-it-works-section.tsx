@@ -52,7 +52,7 @@ export function HowItWorksSection() {
     {
       number: '01',
       title: 'Connect Your Codebase',
-      description: 'Link your repositories, documentation, and deployment infrastructure. KA-CHOW ingests and analyzes your systems in real-time.',
+      description: 'Link your repositories, documentation, and deployment infrastructure. Archon ingests and analyzes your systems in real-time.',
       icon: Network,
     },
     {
@@ -83,7 +83,7 @@ export function HowItWorksSection() {
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">Get Started</span>
           <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">How It Works</h2>
           <p className="mt-6 font-mono text-sm text-muted-foreground max-w-2xl">
-            Get your engineering brain up and running in minutes. KA-CHOW integrates seamlessly into your existing workflow.
+            Get your engineering brain up and running in minutes. Archon integrates seamlessly into your existing workflow.
           </p>
         </div>
 

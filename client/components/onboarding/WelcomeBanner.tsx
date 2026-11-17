@@ -36,7 +36,7 @@ export function WelcomeBanner({
                     className="relative z-10"
                 >
                     <div className="flex items-center justify-center gap-2 mb-6">
-                        <span className="font-['Syne'] font-bold text-sm text-[#737373] tracking-widest">KA-CHOW</span>
+                        <span className="font-['Syne'] font-bold text-sm text-[#737373] tracking-widest">Archon</span>
                         <span className="font-mono text-[10px] tracking-widest text-[#E5E5E5] bg-[#6366F1]/20 border border-[#6366F1]/40 rounded-full px-3 py-1 text-[#6366F1]">ONBOARDING</span>
                     </div>
 

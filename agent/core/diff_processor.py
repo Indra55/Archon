@@ -11,7 +11,7 @@ from agent.core.neo4j_client import Neo4jClient
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 load_dotenv(env_path)
 
-logger = logging.getLogger("kachow.core.diff")
+logger = logging.getLogger("archon.core.diff")
 
 class DiffProcessor:
     def __init__(self):

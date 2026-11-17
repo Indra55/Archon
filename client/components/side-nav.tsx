@@ -7,6 +7,9 @@ const navItems = [
   { id: "hero", label: "Start" },
   { id: "signals", label: "Features" },
   { id: "work", label: "Components" },
+  { id: "solutions", label: "Solutions" },
+  { id: "pricing", label: "Pricing" },
+  { id: "enterprise", label: "Enterprise" },
   { id: "principles", label: "Values" },
   { id: "colophon", label: "Future" },
 ]
@@ -42,10 +45,10 @@ export function SideNav() {
   }
 
   return (
-    <nav className="fixed left-0 top-0 z-50 h-screen w-16 md:w-20 hidden md:flex flex-col justify-center border-r border-border/30 bg-background/80 backdrop-blur-sm">
+    <nav aria-label="Page sections" className="fixed left-0 top-0 z-50 h-screen w-16 md:w-20 hidden md:flex flex-col justify-center border-r border-border/30 bg-background/80 backdrop-blur-sm">
       <div className="flex flex-col gap-6 px-4">
         {navItems.map(({ id, label }) => (
-          <button key={id} onClick={() => scrollToSection(id)} className="group relative flex items-center gap-3">
+          <button key={id} aria-label={label} aria-current={activeSection === id ? "location" : undefined} onClick={() => scrollToSection(id)} className="group relative flex items-center gap-3">
             <span
               className={cn(
                 "h-1.5 w-1.5 rounded-full transition-all duration-300",

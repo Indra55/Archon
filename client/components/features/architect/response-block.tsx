@@ -1,7 +1,6 @@
 'use client'
 
-import { GraphCanvas } from '@/components/shared/GraphCanvas'
-import { StreamingText } from '@/components/shared/StreamingText'
+import { ArchitectureDiagram } from './architecture-diagram'
 import { useState, useMemo } from 'react'
 import { ChevronDown, ChevronRight, Download, Folder, FolderOpen, FileCode, FileText, File, Settings } from 'lucide-react'
 import { Node, Edge } from '@xyflow/react'
@@ -10,6 +9,7 @@ interface ResponseBlockProps {
   type: 'text' | 'diagram' | 'decision' | 'fileTree' | 'actions'
   data: any
   onAction?: (action: string) => void
+  busy?: boolean
 }
 
 // ── File Tree Helpers ────────────────────────────────────────────────────────
@@ -160,6 +160,7 @@ export function ResponseBlock({
   type,
   data,
   onAction,
+  busy,
 }: ResponseBlockProps) {
   const [expandedPaths, setExpandedPaths] = useState<Record<string, boolean>>({})
   const [allExpanded, setAllExpanded] = useState(false)
@@ -212,23 +213,12 @@ export function ResponseBlock({
     case 'text':
       return (
         <p className="font-mono text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
-          <StreamingText text={data.content} speed={8} />
+          {data.content}
         </p>
       )
 
     case 'diagram':
-      return (
-        <div className="w-full h-[420px] bg-card border border-muted-foreground/30 rounded-xl overflow-hidden mt-4 mb-4">
-          <GraphCanvas
-            nodes={data.nodes}
-            edges={data.edges}
-            animateIn={true}
-            showControls={true}
-            showMinimap={true}
-            height={420}
-          />
-        </div>
-      )
+      return <ArchitectureDiagram design={data.design} projectName={data.projectName} />
 
     case 'decision':
       return (
@@ -297,7 +287,7 @@ export function ResponseBlock({
               >
                 {allExpanded ? 'Collapse All' : 'Expand All'}
               </button>
-              <button className="flex items-center gap-1.5 font-mono text-xs text-accent hover:text-accent/80 transition-colors">
+              <button disabled={busy} onClick={() => onAction?.('download')} className="flex items-center gap-1.5 font-mono text-xs text-accent hover:text-accent/80 transition-colors disabled:opacity-40">
                 <Download size={12} />
                 Download
               </button>
@@ -324,22 +314,25 @@ export function ResponseBlock({
       return (
         <div className="mt-6 flex flex-wrap gap-3">
           <button
+            disabled={busy}
             onClick={() => onAction?.('scaffold')}
             className="px-5 py-2.5 bg-accent text-background rounded-lg font-mono text-sm font-medium hover:bg-accent/90 transition-colors"
           >
-            Scaffold This Project
+            {data.hasFiles ? 'Download Scaffold' : 'Scaffold This Project'}
           </button>
           <button
+            disabled={busy}
             onClick={() => onAction?.('modify')}
             className="px-5 py-2.5 bg-card border border-muted-foreground/30 text-foreground rounded-lg font-mono text-sm font-medium hover:border-accent/60 transition-colors"
           >
             Modify Architecture
           </button>
           <button
+            disabled={busy}
             onClick={() => onAction?.('export')}
             className="px-5 py-2.5 bg-transparent border border-muted-foreground/30 text-foreground rounded-lg font-mono text-sm font-medium hover:border-accent/60 transition-colors"
           >
-            Export as PDF
+            Export Blueprint
           </button>
         </div>
       )

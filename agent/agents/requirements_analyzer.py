@@ -13,7 +13,7 @@ from typing import Any
 from agent.core.llm import invoke_llm_json
 from agent.prompts.architecture import REQUIREMENTS_ANALYSIS_PROMPT
 
-logger = logging.getLogger("kachow.agents.requirements")
+logger = logging.getLogger("archon.agents.requirements")
 
 
 async def analyze_requirements(state: dict[str, Any]) -> dict[str, Any]:

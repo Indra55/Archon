@@ -1,5 +1,5 @@
 """
-KA-CHOW Core — LLM Client
+Archon Core — LLM Client
 
 Shared OpenRouter LLM instance used by ALL agents across ALL pipelines.
 Uses OpenAI-compatible API via OpenRouter.
@@ -18,13 +18,32 @@ from openai import AsyncOpenAI
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 load_dotenv(env_path)
 
-logger = logging.getLogger("kachow.core.llm")
+logger = logging.getLogger("archon.core.llm")
 
 # Module-level async client (reused across calls)
 _client: AsyncOpenAI | None = None
 
 MAX_RETRIES = 3
 RETRY_BACKOFF = 2  # seconds, doubles each retry
+DEFAULT_MODEL = "nvidia/nemotron-3.5-super-vl:free"
+DEFAULT_FALLBACKS = (
+    "inclusionai/ling-3.2-flash:free",
+    "google/gemma-4-31b-it:free",
+    "openrouter/free",
+)
+
+
+def get_model_config() -> dict:
+    model = os.getenv("OPENROUTER_MODEL", "").strip() or DEFAULT_MODEL
+    fallbacks = os.getenv("OPENROUTER_FALLBACK_MODELS", ",".join(DEFAULT_FALLBACKS))
+    models = list(dict.fromkeys([model, *(m.strip() for m in fallbacks.split(",") if m.strip())]))
+    return {
+        "model": model,
+        "models": models[1:],
+        "provider": {"max_price": {"prompt": 0, "completion": 0}},
+        "reasoning": {"enabled": False},
+        "max_tokens": int(os.getenv("OPENROUTER_MAX_TOKENS", "16384")),
+    }
 
 JSON_SYSTEM_MESSAGE = (
     "You are a precise code generation assistant. You MUST respond with ONLY valid JSON. "
@@ -41,7 +60,8 @@ def _get_client() -> AsyncOpenAI:
     if _client is None:
         _client = AsyncOpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key=os.getenv("OPENROUTER_API"),
+            api_key=os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_API"),
+            max_retries=0,
         )
     return _client
 
@@ -87,7 +107,8 @@ async def invoke_llm(
 ) -> str:
     """Invoke OpenRouter LLM with a prompt, with retry logic."""
     client = _get_client()
-    model = os.getenv("OPENROUTER_MODEL", "stepfun/step-3.5-flash:free")
+    config = get_model_config()
+    model = config.pop("model")
 
     messages = []
     if system_message:
@@ -102,11 +123,13 @@ async def invoke_llm(
                 model=model,
                 messages=messages,
                 temperature=temperature,
+                extra_body=config,
                 timeout=600.0,
             )
             content = response.choices[0].message.content
             if not content or not content.strip():
                 raise ValueError("LLM returned empty response")
+            logger.info("LLM response served by %s", response.model)
             return content
         except Exception as e:
             last_error = e

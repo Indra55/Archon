@@ -1,4 +1,5 @@
 import os
+import asyncio
 import logging
 from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
@@ -11,7 +12,7 @@ from langchain_core.documents import Document
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 load_dotenv(env_path)
 
-logger = logging.getLogger("kachow.core.vector_store")
+logger = logging.getLogger("archon.core.vector_store")
 
 from sqlalchemy.ext.asyncio import create_async_engine
 

@@ -274,14 +274,14 @@ export const MODULES: OnboardingModule[] = [
         title: 'CI/CD & Standards',
         serviceId: null,
         estimatedMinutes: 20,
-        description: 'Learn how KA-CHOW integrates into our development workflow — what it checks on every PR, how to interpret CI failures, and how to fix a blocked merge.',
+        description: 'Learn how Archon integrates into our development workflow — what it checks on every PR, how to interpret CI failures, and how to fix a blocked merge.',
         tasks: [
             {
                 id: 'task-ci-1',
                 moduleId: 'ci-workflow',
                 type: 'read',
                 title: 'Read the CI enforcement rules',
-                description: 'Review the active CI/CD enforcement rules in KA-CHOW. Understand what triggers a block vs. a warning, and how to resolve each.',
+                description: 'Review the active CI/CD enforcement rules in Archon. Understand what triggers a block vs. a warning, and how to resolve each.',
                 estimatedMinutes: 10,
                 deepLink: { route: '/dashboard/ci-enforcer', params: {}, label: 'Open CI Enforcer', openInNewTab: false },
                 completionCriteria: 'You know what "No docs, no merge" means in practice and what to do when your PR is blocked by it.',

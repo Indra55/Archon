@@ -20,7 +20,7 @@ logging.basicConfig(
     format="%(asctime)s | %(name)-20s | %(levelname)-7s | %(message)s",
     datefmt="%H:%M:%S",
 )
-logger = logging.getLogger("kachow.scripts.ingest")
+logger = logging.getLogger("archon.scripts.ingest")
 
 load_dotenv()
 

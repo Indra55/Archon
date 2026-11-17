@@ -1,5 +1,5 @@
 """
-KA-CHOW Core — PR Review Service
+Archon Core — PR Review Service
 
 Automatically reviews Pull Requests against the knowledge graph:
 1. Fetches PR diff from GitHub
@@ -31,7 +31,7 @@ from agent.prompts.pr_review import PR_REVIEW_PROMPT, PR_REVIEW_SYSTEM_PROMPT, D
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 load_dotenv(env_path)
 
-logger = logging.getLogger("kachow.core.pr_review")
+logger = logging.getLogger("archon.core.pr_review")
 
 
 class PRReviewService:
@@ -310,7 +310,7 @@ class PRReviewService:
         }
 
         lines = []
-        lines.append(f"## {verdict_emoji.get(verdict, '🔍')} KA-CHOW Architecture Review — `{verdict}`\n")
+        lines.append(f"## {verdict_emoji.get(verdict, '🔍')} Archon Architecture Review — `{verdict}`\n")
         lines.append(review.get("summary", "No summary available."))
         lines.append("")
 
@@ -358,7 +358,7 @@ class PRReviewService:
             lines.append("")
 
         lines.append("---")
-        lines.append("*Automated review by KA-CHOW Architecture Agent*")
+        lines.append("*Automated review by Archon Architecture Agent*")
 
         return "\n".join(lines)
 
@@ -503,7 +503,7 @@ class PRReviewService:
     ) -> str:
         """Format a PR comment describing the documentation updates."""
         lines = []
-        lines.append("## 📄 KA-CHOW Auto Documentation Update\n")
+        lines.append("## 📄 Archon Auto Documentation Update\n")
         lines.append(f"{change_summary}\n")
 
         if outdated_sections:
@@ -518,6 +518,6 @@ class PRReviewService:
         lines.append("> The `README.md` has been automatically updated in this PR branch.")
         lines.append("")
         lines.append("---")
-        lines.append("*Auto-documentation by KA-CHOW Architecture Agent*")
+        lines.append("*Auto-documentation by Archon Architecture Agent*")
 
         return "\n".join(lines)

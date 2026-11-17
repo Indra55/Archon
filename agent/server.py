@@ -1,5 +1,5 @@
 """
-KA-CHOW Architecture Agent — Flask Backend API
+Archon Architecture Agent — Flask Backend API
 
 Endpoints:
   POST /api/v1/architect     — Full pipeline (streaming SSE)
@@ -44,6 +44,7 @@ from flask_cors import CORS
 from agent.pipelines.architecture_pipeline import compile_architecture_pipeline
 from agent.agents import analyze_requirements, design_architecture
 from agent.output import write_output
+from agent.core.state import ArchitecturePipelineState
 from agent.core.neo4j_client import Neo4jClient
 from agent.core.health_service import HealthService
 from agent.core.knowledge_service import KnowledgeService
@@ -61,7 +62,7 @@ logging.basicConfig(
     format="%(asctime)s | %(name)-20s | %(levelname)-7s | %(message)s",
     datefmt="%H:%M:%S",
 )
-logger = logging.getLogger("kachow.server")
+logger = logging.getLogger("archon.server")
 
 # ── Windows Asyncio Fix ───────────────────────────────────────────────────────
 if sys.platform == 'win32':
@@ -212,7 +213,7 @@ def health_check():
     """Health check endpoint."""
     return jsonify({
         "status": "healthy",
-        "service": "kachow-architecture-agent",
+        "service": "archon-architecture-agent",
         "version": "1.0.0",
         "openrouter_configured": bool(os.getenv("OPENROUTER_API")),
         "github_configured": bool(os.getenv("GITHUB_TOKEN") and os.getenv("GITHUB_REPO")),
@@ -641,15 +642,26 @@ def run_full_pipeline():
 
     data = flask_request.get_json()
     requirements = data["requirements"]
-    output_dir = data.get("output_dir", "./output")
-
-    # Per-project GitHub overrides (from project PAT)
-    github_token = data.get("github_token") or os.getenv("GITHUB_TOKEN")
-    github_repo = data.get("github_repo") or os.getenv("GITHUB_REPO")
-    if github_token:
-        os.environ["GITHUB_TOKEN"] = github_token
-    if github_repo:
-        os.environ["GITHUB_REPO"] = github_repo
+    action = data.get("action", "design")
+    if action not in ("design", "scaffold"):
+        return jsonify({"error": "Unknown architecture action"}), 400
+    architecture = data.get("architecture") or {}
+    if not isinstance(architecture, dict):
+        return jsonify({"error": "Architecture must be an object"}), 400
+    if action == "scaffold" and not architecture.get("services"):
+        return jsonify({"error": "Design an architecture before scaffolding"}), 400
+    if data.get("modification"):
+        current_design = {key: architecture.get(key) for key in (
+            "project_name", "project_summary", "services", "databases", "api_endpoints",
+            "api_gateway", "decisions", "architecture_style", "constraints",
+        )}
+        requirements = (
+            f"Original requirements: {architecture.get('user_requirements', '')}\n"
+            f"Current architecture: {json.dumps(current_design)}\n"
+            f"Requested changes: {data['modification']}\n"
+            "Revise the existing architecture. Preserve all requirements and decisions "
+            "unless the requested changes replace them."
+        )
 
     def event_stream():
         """Generator that yields SSE events from the async pipeline."""
@@ -659,10 +671,8 @@ def run_full_pipeline():
         q: queue.Queue = queue.Queue()
 
         def _run_in_thread():
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
             try:
-                pipeline = compile_architecture_pipeline()
+                pipeline = compile_architecture_pipeline(action)
                 initial_state = {
                     "user_requirements": requirements,
                     "current_phase": "requirements_analysis",
@@ -676,6 +686,11 @@ def run_full_pipeline():
                     "non_functional_requirements": [],
                     "constraints": [],
                 }
+                if action == "scaffold":
+                    allowed = ArchitecturePipelineState.__annotations__.keys()
+                    initial_state.update({key: value for key, value in architecture.items() if key in allowed})
+                    initial_state["errors"] = []
+                    initial_state["scaffolded_files"] = []
                 final_state = {**initial_state}
 
                 async def _run_pipeline():
@@ -742,20 +757,18 @@ def run_full_pipeline():
 
                     # Write output to disk
                     try:
-                        write_output(final_state, output_dir)
                         safe_final = _safe_serialize(final_state)
                         q.put(json.dumps({"type": "complete", "state": safe_final}))
                     except Exception as e:
                         logger.error(f"Output write failed: {e}")
                         q.put(json.dumps({"type": "error", "errors": [f"Output write failed: {str(e)}"]}))
 
-                loop.run_until_complete(_run_pipeline())
+                _run_async(_run_pipeline())
 
             except Exception as e:
                 logger.error(f"Pipeline stream failed: {e}\n{traceback.format_exc()}")
                 q.put(json.dumps({"type": "error", "errors": [str(e)]}))
             finally:
-                loop.close()
                 q.put(None)  # sentinel to signal end
 
         # Start pipeline in a background thread
@@ -764,7 +777,11 @@ def run_full_pipeline():
 
         # Yield SSE events as they arrive in the queue
         while True:
-            item = q.get()
+            try:
+                item = q.get(timeout=15)
+            except queue.Empty:
+                yield ": keep-alive\n\n"
+                continue
             if item is None:
                 break
             yield f"data: {item}\n\n"
@@ -778,6 +795,22 @@ def run_full_pipeline():
             "X-Accel-Buffering": "no",
         },
     )
+
+
+@app.route("/api/v1/architect/archive", methods=["POST"])
+def download_scaffold():
+    from agent.core.scaffold_archive import build_scaffold_archive
+    data = flask_request.get_json(silent=True) or {}
+    files = data.get("files")
+    if not isinstance(files, list) or not files:
+        return jsonify({"error": "No generated files to download"}), 400
+    try:
+        archive = build_scaffold_archive(files, data.get("blueprint", ""))
+        return Response(archive, mimetype="application/zip", headers={
+            "Content-Disposition": 'attachment; filename="archon-scaffold.zip"'
+        })
+    except (ValueError, TypeError, AttributeError) as error:
+        return jsonify({"error": str(error)}), 400
 
 
 # ── Non-streaming full pipeline (alternative) ────────────────────────────────
@@ -908,7 +941,7 @@ def internal_error(e):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     debug = os.getenv("FLASK_DEBUG", "false").lower() == "true"
-    logger.info(f"🚀 KA-CHOW Flask API starting on http://0.0.0.0:{port}")
+    logger.info(f"🚀 Archon Flask API starting on http://0.0.0.0:{port}")
     logger.info(f"   Endpoints:")
     logger.info(f"     GET  /api/v1/health")
     logger.info(f"     GET  /api/v1/knowledge/graph")

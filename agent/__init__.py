@@ -1,5 +1,5 @@
 """
-KA-CHOW: The Autonomous Engineering Brain
+Archon: The Autonomous Engineering Brain
 
 Modular agent platform with reusable agents and feature-specific pipelines.
 

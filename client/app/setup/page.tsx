@@ -155,7 +155,7 @@ export default function OrgSetupPage() {
                                     GitHub Access Token
                                 </label>
                                 <a
-                                    href="https://github.com/settings/tokens/new?scopes=read:org,repo&description=KA-CHOW+Org+Token"
+                                    href="https://github.com/settings/tokens/new?scopes=read:org,repo&description=Archon+Org+Token"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-1 text-[10px] font-mono text-accent hover:text-accent/80 transition-colors"
@@ -268,7 +268,7 @@ export default function OrgSetupPage() {
                         Back to login
                     </Link>
                     <p className="text-[10px] font-mono text-muted/40">
-                        KA-CHOW · Admin Setup
+                        Archon · Admin Setup
                     </p>
                 </div>
             </motion.div>

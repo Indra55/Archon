@@ -7,8 +7,9 @@ import httpx
 
 from agent.core.neo4j_client import Neo4jClient
 from agent.core.retriever import HybridRetriever
+from agent.core.llm import get_model_config
 
-logger = logging.getLogger("kachow.impact_service")
+logger = logging.getLogger("archon.impact_service")
 logger.info(">>> IMPACT_SERVICE MODULE LOADED — NEW FORMAT v2 <<<")
 print(f"[DEBUG] impact_service.py loaded from: {__file__}")
 print("[DEBUG] NEW FORMAT v2 — using snake_case keys")
@@ -20,7 +21,7 @@ class ImpactService:
         self.openrouter_url = "https://openrouter.ai/api/v1/chat/completions"
         # Check both potential key names
         self.api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_API")
-        self.model = os.getenv("OPENROUTER_MODEL", "stepfun/step-3.5-flash:free")
+        self.model = get_model_config()["model"]
 
     async def get_suggested_scenarios(self) -> List[str]:
         """Returns sample 'What-If' scenarios using LLM understanding of the project."""
@@ -58,7 +59,7 @@ class ImpactService:
                         "X-Title": "Singularity Impact Analyzer",
                     },
                     json={
-                        "model": self.model,
+                        **get_model_config(),
                         "messages": [{"role": "user", "content": prompt}],
                     },
                     timeout=10.0
@@ -440,7 +441,7 @@ RULES:
                         "X-Title": "Singularity Impact Analyzer",
                     },
                     json={
-                        "model": self.model,
+                        **get_model_config(),
                         "messages": [{"role": "user", "content": prompt}],
                     },
                     timeout=50.0
@@ -459,7 +460,7 @@ RULES:
                     report["metadata"] = {}
                 report["metadata"]["graph_snapshot_id"] = focal.get("uuid", "unknown")
                 report["metadata"]["analyzed_at"] = datetime.now(timezone.utc).isoformat()
-                report["metadata"]["model_version"] = self.model
+                report["metadata"]["model_version"] = res_data.get("model", self.model)
                 
                 # Build impact_visualization from actual graph data
                 report["impact_visualization"] = {
@@ -530,7 +531,7 @@ INSTRUCTIONS:
                         "X-Title": "Singularity Impact Analyzer",
                     },
                     json={
-                        "model": self.model,
+                        **get_model_config(),
                         "messages": [{"role": "user", "content": prompt}],
                     },
                     timeout=30.0

@@ -1,5 +1,5 @@
 """
-KA-CHOW Core — Onboarding Service
+Archon Core — Onboarding Service
 
 Generates personalized learning paths and starter tasks for new team members
 by leveraging the Neo4j knowledge graph and LLM.
@@ -16,7 +16,7 @@ from agent.core.retriever import HybridRetriever
 from agent.core.llm import invoke_llm, invoke_llm_json
 from agent.prompts.onboarding import LEARNING_PATH_PROMPT, STARTER_TASK_PROMPT
 
-logger = logging.getLogger("kachow.core.onboarding")
+logger = logging.getLogger("archon.core.onboarding")
 
 # Role-specific search queries for building graph context
 ROLE_QUERIES = {

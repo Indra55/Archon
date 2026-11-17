@@ -102,7 +102,7 @@ export function WorkSection() {
           <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">SYSTEM COMPONENTS</h2>
         </div>
         <p className="hidden md:block max-w-xs font-mono text-xs text-muted-foreground text-right leading-relaxed">
-          The interconnected systems that make KA-CHOW your engineering brain.
+          The interconnected systems that make Archon your engineering brain.
         </p>
       </div>
 

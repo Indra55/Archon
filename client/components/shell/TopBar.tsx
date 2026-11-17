@@ -10,7 +10,7 @@ export function TopBar() {
     const { isSidebarExpanded, setCommandPaletteOpen, notifications, markNotificationRead, unreadCount } = useAppStore()
     const { user, isAdmin } = useAuth()
 
-    const userInitials = user?.username ? user.username.slice(0, 2).toUpperCase() : 'KA'
+    const userInitials = user?.username ? user.username.slice(0, 2).toUpperCase() : 'AR'
 
     const pathname = usePathname()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)

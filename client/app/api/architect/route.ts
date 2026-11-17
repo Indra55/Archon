@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 const AGENT_URL = process.env.AGENT_API_URL || 'http://localhost:8000'
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5555'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { requirements, projectId } = body
+    const { requirements, action = 'design', architecture, modification } = body
 
     if (!requirements || requirements.trim().length < 10) {
       return NextResponse.json(
@@ -16,39 +14,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // If projectId is provided, fetch the PAT from the backend
-    let github_token: string | undefined
-    let github_repo: string | undefined
-
-    if (projectId) {
-      const cookieStore = await cookies()
-      const token = cookieStore.get('token')?.value
-
-      if (token) {
-        try {
-          const patResponse = await fetch(
-            `${BACKEND_URL}/projects/${projectId}/pat`,
-            { headers: { Cookie: `token=${token}` } }
-          )
-          if (patResponse.ok) {
-            const patData = await patResponse.json()
-            github_token = patData.github_pat
-            github_repo = patData.github_repo
-          }
-        } catch (err) {
-          console.error('Failed to fetch project PAT:', err)
-        }
-      }
-    }
-
     // Call the Flask agent API with SSE streaming
     const agentResponse = await fetch(`${AGENT_URL}/api/v1/architect`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         requirements,
-        ...(github_token && { github_token }),
-        ...(github_repo && { github_repo }),
+        action,
+        architecture,
+        modification,
       }),
     })
 

@@ -137,7 +137,7 @@ export default function DashboardPage() {
                 No projects yet
               </p>
               <p className="text-xs text-muted-foreground/60 font-mono mb-4">
-                Connect a GitHub repo to get started with KA-CHOW
+                Connect a GitHub repo to get started with Archon
               </p>
               <button
                 onClick={() => setIsModalOpen(true)}

@@ -7,7 +7,7 @@ from typing import List, Dict, Any, Optional
 from agent.core.vector_store import TwinVectorStore
 from agent.core.neo4j_client import Neo4jClient
 
-logger = logging.getLogger("kachow.core.retriever")
+logger = logging.getLogger("archon.core.retriever")
 
 class HybridRetriever:
     def __init__(self):

@@ -4,6 +4,9 @@ import { WorkSection } from "@/components/work-section"
 import { PrinciplesSection } from "@/components/principles-section"
 import { ColophonSection } from "@/components/colophon-section"
 import { SideNav } from "@/components/side-nav"
+import { SolutionsSection } from "@/components/solutions-section"
+import { PricingSection } from "@/components/pricing-section"
+import { EnterpriseSection } from "@/components/enterprise-section"
 
 export default function Page() {
   return (
@@ -15,6 +18,9 @@ export default function Page() {
         <HeroSection />
         <SignalsSection />
         <WorkSection />
+        <SolutionsSection />
+        <PricingSection />
+        <EnterpriseSection />
         <PrinciplesSection />
         <ColophonSection />
       </div>

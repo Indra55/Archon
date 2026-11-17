@@ -6,12 +6,12 @@
 export const GITHUB_CONFIG = {
   clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || "",
   clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-  redirectUri: `https://spit-hackathon-o4kf.onrender.com/auth/github/callback`,
+  redirectUri: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5555"}/auth/github/callback`,
   scope: "user:email read:org",
 };
 
 export const getGithubAuthUrl = (joinCode?: string) => {
-  const backendUrl = "https://spit-hackathon-o4kf.onrender.com";
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5555";
   const base = `${backendUrl}/auth/github`;
   if (joinCode) {
     return `${base}?join_code=${encodeURIComponent(joinCode)}`;
@@ -19,7 +19,7 @@ export const getGithubAuthUrl = (joinCode?: string) => {
   return base;
 };
 
-export interface KachowUser {
+export interface ArchonUser {
   id: string;
   username: string;
   email: string;

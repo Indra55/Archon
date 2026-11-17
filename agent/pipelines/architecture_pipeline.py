@@ -26,7 +26,7 @@ from agent.agents import (
 )
 from agent.core.state import ArchitecturePipelineState
 
-logger = logging.getLogger("kachow.pipelines.architecture")
+logger = logging.getLogger("archon.pipelines.architecture")
 
 
 # ─── Routing functions ────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@ def should_create_pr(state: dict[str, Any]) -> str:
 
 # ─── Graph builder ────────────────────────────────────────────────────────────
 
-def build_architecture_graph() -> StateGraph:
+def build_architecture_graph(mode: str = "full") -> StateGraph:
     """
     Build the Feature 1 pipeline graph.
 
@@ -92,7 +92,7 @@ def build_architecture_graph() -> StateGraph:
     graph.add_node("create_pr", create_pr)
 
     # Entry point
-    graph.set_entry_point("analyze_requirements")
+    graph.set_entry_point("scaffold_infrastructure" if mode == "scaffold" else "analyze_requirements")
 
     # Edges with error checking
     graph.add_conditional_edges(
@@ -105,12 +105,12 @@ def build_architecture_graph() -> StateGraph:
     )
     graph.add_conditional_edges(
         "generate_blueprint", should_continue,
-        {"continue": "scaffold_infrastructure", "error": END},
+        {"continue": END if mode == "design" else "scaffold_infrastructure", "error": END},
     )
 
     # After scaffolding: optionally create PR
     graph.add_conditional_edges(
-        "scaffold_infrastructure", should_create_pr,
+        "scaffold_infrastructure", should_create_pr if mode == "full" else lambda state: "skip_pr",
         {"create_pr": "create_pr", "skip_pr": END, "error": END},
     )
 
@@ -119,6 +119,6 @@ def build_architecture_graph() -> StateGraph:
     return graph
 
 
-def compile_architecture_pipeline():
+def compile_architecture_pipeline(mode: str = "full"):
     """Build and compile the architecture pipeline."""
-    return build_architecture_graph().compile()
+    return build_architecture_graph(mode).compile()

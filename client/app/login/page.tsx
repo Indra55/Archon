@@ -95,7 +95,7 @@ export default function LoginPage() {
             <span className="text-2xl">⚡</span>
           </div>
           <h1 className="text-3xl font-bold text-primary font-sans tracking-tight">
-            KA-CHOW
+            Archon
           </h1>
           <p className="text-sm text-muted mt-1 font-mono">
             AI Engineering Intelligence Platform
@@ -155,7 +155,7 @@ export default function LoginPage() {
             </div>
             <div className="relative flex justify-center">
               <span className="px-3 bg-surface/80 text-[10px] font-mono text-muted uppercase tracking-wider">
-                new to KA-CHOW?
+                new to Archon?
               </span>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-[10px] font-mono text-muted/40 mt-6">
-          KA-CHOW · AI Engineering Intelligence Platform
+          Archon · AI Engineering Intelligence Platform
         </p>
       </motion.div>
     </main>

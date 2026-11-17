@@ -28,6 +28,9 @@ const generateToken = (user) => {
 router.get(
     "/github",
     (req, res, next) => {
+        if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+            return res.status(503).json({ error: "Configure GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in server/.env to enable GitHub login" });
+        }
         // If join_code is provided, stash it in a short-lived cookie
         // so passport strategy can read it after the OAuth redirect
         const joinCode = req.query.join_code;

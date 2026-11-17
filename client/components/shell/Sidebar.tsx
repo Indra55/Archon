@@ -80,7 +80,7 @@ export function Sidebar() {
     // User initials
     const initials = user?.username
         ? user.username.slice(0, 2).toUpperCase()
-        : 'KA'
+        : 'AR'
 
     return (
         <aside
@@ -109,7 +109,7 @@ export function Sidebar() {
                             transition={{ delay: 0.15, duration: 0.2 }}
                             className="ml-3 font-sans font-bold text-primary tracking-[-0.02em] text-[1.1rem] whitespace-nowrap"
                         >
-                            KA-CHOW
+                            Archon
                         </motion.span>
                     )}
                 </AnimatePresence>

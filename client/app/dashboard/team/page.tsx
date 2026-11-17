@@ -444,7 +444,7 @@ export default function TeamManagementPage() {
                                                     </div>
                                                     <div>
                                                         <span className="text-sm font-sans font-medium text-primary">@{member.github_username}</span>
-                                                        <p className="text-[10px] font-mono text-muted">Not yet logged into KA-CHOW</p>
+                                                        <p className="text-[10px] font-mono text-muted">Not yet logged into Archon</p>
                                                     </div>
                                                 </div>
                                                 <button

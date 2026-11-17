@@ -14,7 +14,7 @@ from typing import Any
 from agent.core.llm import invoke_llm
 from agent.prompts.architecture import BLUEPRINT_GENERATION_PROMPT
 
-logger = logging.getLogger("kachow.agents.blueprint")
+logger = logging.getLogger("archon.agents.blueprint")
 
 
 def _dump(items: list) -> str:

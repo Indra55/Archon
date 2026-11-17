@@ -6,7 +6,7 @@ from tree_sitter import Language, Parser
 import tree_sitter_python as tspython
 import tree_sitter_typescript as tstypescript
 
-logger = logging.getLogger("kachow.core.parser")
+logger = logging.getLogger("archon.core.parser")
 
 @dataclass
 class CodeChunk:

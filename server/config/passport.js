@@ -3,7 +3,7 @@ const GitHubStrategy = require("passport-github2").Strategy;
 const pool = require("./dbConfig");
 const { decrypt } = require("../utils/encryption");
 
-passport.use(
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) passport.use(
     new GitHubStrategy(
         {
             clientID: process.env.GITHUB_CLIENT_ID,
@@ -50,7 +50,7 @@ passport.use(
                             headers: {
                                 Authorization: `Bearer ${orgToken}`,
                                 Accept: "application/vnd.github.v3+json",
-                                "User-Agent": "KA-CHOW",
+                                "User-Agent": "Archon",
                             },
                         }
                     );

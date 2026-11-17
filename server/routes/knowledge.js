@@ -154,7 +154,7 @@ router.post("/sources/:id/test", checkAuthenticated, checkAdmin, async (req, res
                 headers: {
                     Authorization: `Bearer ${orgToken}`,
                     Accept: "application/vnd.github.v3+json",
-                    "User-Agent": "KA-CHOW",
+                    "User-Agent": "Archon",
                 },
             });
 
@@ -284,7 +284,7 @@ router.post("/sources/:id/sync", checkAuthenticated, checkAdmin, async (req, res
                         headers: {
                             Authorization: `Bearer ${orgToken}`,
                             Accept: "application/vnd.github.v3+json",
-                            "User-Agent": "KA-CHOW",
+                            "User-Agent": "Archon",
                         },
                     }
                 );
@@ -307,7 +307,7 @@ router.post("/sources/:id/sync", checkAuthenticated, checkAdmin, async (req, res
                                 headers: {
                                     Authorization: `Bearer ${orgToken}`,
                                     Accept: "application/vnd.github.v3+json",
-                                    "User-Agent": "KA-CHOW",
+                                    "User-Agent": "Archon",
                                 },
                             }
                         );
@@ -318,7 +318,7 @@ router.post("/sources/:id/sync", checkAuthenticated, checkAdmin, async (req, res
                                     headers: {
                                         Authorization: `Bearer ${orgToken}`,
                                         Accept: "application/vnd.github.v3+json",
-                                        "User-Agent": "KA-CHOW",
+                                        "User-Agent": "Archon",
                                     },
                                 });
                                 if (fileRes.ok) {
@@ -343,7 +343,7 @@ router.post("/sources/:id/sync", checkAuthenticated, checkAdmin, async (req, res
                                 headers: {
                                     Authorization: `Bearer ${orgToken}`,
                                     Accept: "application/vnd.github.v3+json",
-                                    "User-Agent": "KA-CHOW",
+                                    "User-Agent": "Archon",
                                 },
                             }
                         );

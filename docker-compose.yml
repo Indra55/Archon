@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: archon
+      POSTGRES_PASSWORD: archon_local
+      POSTGRES_DB: archon
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - ./.local/postgres:/var/lib/postgresql/data
+      - ./server/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./server/database/vector.sql:/docker-entrypoint-initdb.d/02-vector.sql:ro
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U archon -d archon"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  neo4j:
+    image: neo4j:5-community
+    environment:
+      NEO4J_AUTH: neo4j/archon_local
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 256m
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    volumes:
+      - ./.local/neo4j:/data
+      - ./.local/neo4j-logs:/logs
+    tmpfs:
+      - /tmp:exec,mode=1777
+      - /var/lib/neo4j/run:uid=7474,gid=7474
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:7474"]
+      interval: 5s
+      timeout: 5s
+      retries: 60

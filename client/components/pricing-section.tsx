@@ -1,50 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Check } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
+import Link from 'next/link'
 
 export function PricingSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement>(null)
   const [isAnnual, setIsAnnual] = useState(false)
-
-  useEffect(() => {
-    if (!sectionRef.current || !headerRef.current || !cardsRef.current) return
-
-    const ctx = gsap.context(() => {
-      // Header animation
-      gsap.from(headerRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse',
-        },
-      })
-
-      // Cards stagger animation
-      gsap.from(cardsRef.current?.querySelectorAll('[data-card]'), {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 60%',
-          toggleActions: 'play none none reverse',
-        },
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
 
   const tiers = [
     {
@@ -57,10 +18,11 @@ export function PricingSection() {
         'Basic architecture analysis',
         'Knowledge graph for 1 codebase',
         'Documentation auto-sync',
-        'Community support',
-        'Basic CI/CD integration',
+        'Codebase Q&A',
+        'Blueprint export',
       ],
-      cta: 'Start Free Trial',
+      cta: 'Explore Archon',
+      href: '/signup',
       highlighted: false,
     },
     {
@@ -73,12 +35,13 @@ export function PricingSection() {
         'Advanced architecture analysis',
         'Knowledge graph for 5 codebases',
         'Real-time documentation sync',
-        'Priority email support',
+        'Team workspace',
         'Full CI/CD integration',
         'What-if impact analysis',
-        'Custom integrations',
+        'Architecture timeline',
       ],
-      cta: 'Start Free Trial',
+      cta: 'Explore team workflows',
+      href: '/signup',
       highlighted: true,
     },
     {
@@ -91,25 +54,27 @@ export function PricingSection() {
         'Custom architecture workflows',
         'Unlimited codebases',
         'Advanced knowledge graph features',
-        '24/7 dedicated support',
-        'SLA guarantee',
-        'On-premise deployment option',
+        'Deployment planning',
+        'Architecture review workflows',
+        'Self-hosted evaluation',
         'Custom workflows & automation',
       ],
-      cta: 'Contact Sales',
+      cta: 'Explore Enterprise',
+      href: '#enterprise',
       highlighted: false,
     },
   ]
 
   return (
-    <section ref={sectionRef} id="pricing" className="relative py-24 px-6 md:px-28">
+    <section id="pricing" aria-labelledby="pricing-title" className="relative scroll-mt-24 py-24 pl-6 md:pl-28 pr-6 md:pr-12">
       <div className="max-w-7xl">
         {/* Header */}
-        <div ref={headerRef} className="mb-16 text-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">TRANSPARENT PRICING</span>
-          <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">Choose Your Plan</h2>
+        <div className="mb-16 text-center">
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">PRICING / PREVIEW</span>
+          <h2 id="pricing-title" className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">ROOM TO BUILD</h2>
           <p className="mt-6 font-mono text-sm text-muted-foreground max-w-2xl mx-auto">
-            No hidden fees. No credit card required for trial. Start free and scale as you grow.
+            Mock pricing for now. Prices, limits, and plan features below are illustrative.
+            Billing and subscriptions are not active; explore the product without selecting a paid plan.
           </p>
 
           {/* Billing Toggle */}
@@ -118,6 +83,10 @@ export function PricingSection() {
               Monthly
             </span>
             <button
+              type="button"
+              role="switch"
+              aria-label="Annual billing"
+              aria-checked={isAnnual}
               onClick={() => setIsAnnual(!isAnnual)}
               className="relative w-14 h-7 bg-accent/20 border border-accent/50 rounded-full transition-colors"
             >
@@ -139,7 +108,7 @@ export function PricingSection() {
         </div>
 
         {/* Pricing Cards */}
-        <div ref={cardsRef} className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -178,15 +147,16 @@ export function PricingSection() {
               </div>
 
               {/* CTA Button */}
-              <button
-                className={`w-full py-3 font-mono text-xs uppercase tracking-widest rounded transition-all duration-200 mb-8 ${
+              <Link
+                href={tier.href}
+                className={`block text-center w-full py-3 font-mono text-xs uppercase tracking-widest rounded transition-all duration-200 mb-8 ${
                   tier.highlighted
                     ? 'bg-accent text-background hover:bg-accent/90 shadow-lg hover:shadow-xl hover:shadow-accent/30'
                     : 'border border-accent/30 text-foreground hover:border-accent hover:text-accent'
                 }`}
               >
                 {tier.cta}
-              </button>
+              </Link>
 
               {/* Features List */}
               <div className="space-y-4">
@@ -205,13 +175,13 @@ export function PricingSection() {
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
           <p className="font-mono text-sm text-muted-foreground mb-4">
-            Not sure which plan is right for you?
+            Evaluating Archon for your team?
           </p>
           <a
-            href="#contact"
+            href="#enterprise"
             className="inline-flex items-center gap-2 px-6 py-3 border border-accent/30 text-foreground font-mono text-xs uppercase tracking-widest rounded hover:border-accent hover:text-accent transition-colors"
           >
-            Schedule a demo
+            Explore team deployment
           </a>
         </div>
       </div>

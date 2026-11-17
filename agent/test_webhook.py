@@ -70,7 +70,7 @@ def test_pr_event():
         print(f"Error sending PR webhook: {e}")
 
 if __name__ == "__main__":
-    print("Testing KA-CHOW Webhook Endpoints...")
+    print("Testing Archon Webhook Endpoints...")
     print("Make sure 'python server.py' is running locally on port 8000!\n")
     
     test_push_event()

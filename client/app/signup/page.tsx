@@ -140,7 +140,7 @@ export default function SignupPage() {
             <span className="text-2xl">⚡</span>
           </div>
           <h1 className="text-3xl font-bold text-primary font-sans tracking-tight">
-            KA-CHOW
+            Archon
           </h1>
           <p className="text-sm text-muted mt-1 font-mono">
             AI Engineering Intelligence Platform
@@ -150,7 +150,7 @@ export default function SignupPage() {
         {/* Heading */}
         <div className="space-y-1 mb-6">
           <h2 className="text-xl font-bold text-primary font-sans">Create an account</h2>
-          <p className="text-xs text-muted font-mono">How will you be using KA-CHOW?</p>
+          <p className="text-xs text-muted font-mono">How will you be using Archon?</p>
         </div>
 
         {/* Role Cards */}
@@ -350,7 +350,7 @@ export default function SignupPage() {
         </p>
 
         <p className="text-center text-[10px] font-mono text-muted/40 mt-4">
-          KA-CHOW · AI Engineering Intelligence Platform
+          Archon · AI Engineering Intelligence Platform
         </p>
       </motion.div>
     </main>

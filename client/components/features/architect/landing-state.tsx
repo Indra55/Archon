@@ -37,7 +37,7 @@ export function LandingState({
 
         {/* Subtitle */}
         <p className="text-sm text-muted-foreground font-mono">
-          I'll design the architecture, choose the stack, and scaffold everything.
+          Design the architecture, refine it, then generate your project files.
         </p>
 
         {/* Textarea */}

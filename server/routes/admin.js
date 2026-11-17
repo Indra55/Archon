@@ -128,7 +128,7 @@ router.get("/org/members", checkAuthenticated, checkAdmin, async (req, res) => {
                 headers: {
                     Authorization: `Bearer ${orgToken}`,
                     Accept: "application/vnd.github.v3+json",
-                    "User-Agent": "KA-CHOW",
+                    "User-Agent": "Archon",
                 },
             }
         );

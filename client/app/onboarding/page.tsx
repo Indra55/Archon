@@ -59,16 +59,16 @@ export default function OnboardingPage() {
               Welcome, {user?.name}!
             </h1>
             <p className="text-muted-foreground">
-              Let's set up your KaChow workspace
+              Let's set up your Archon workspace
             </p>
           </div>
 
           {/* Welcome Card */}
           <Card className="border border-border p-8 space-y-6 bg-card">
             <div className="space-y-4">
-              <h2 className="text-2xl font-semibold">Get started with KaChow</h2>
+              <h2 className="text-2xl font-semibold">Get started with Archon</h2>
               <p className="text-muted-foreground leading-relaxed">
-                KaChow transforms fragmented system knowledge into a living knowledge graph. We'll help you understand your entire codebase and make architecture decisions with confidence.
+                Archon transforms fragmented system knowledge into a living knowledge graph. We'll help you understand your entire codebase and make architecture decisions with confidence.
               </p>
             </div>
 

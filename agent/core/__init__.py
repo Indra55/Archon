@@ -1,5 +1,5 @@
 """
-KA-CHOW Core — Shared utilities across all pipelines.
+Archon Core — Shared utilities across all pipelines.
 """
 
 from .llm import invoke_llm, invoke_llm_json, parse_json_response

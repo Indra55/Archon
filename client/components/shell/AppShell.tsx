@@ -1,6 +1,6 @@
 'use client'
 
-import React, from 'react'
+import React from 'react'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
 import { CommandPalette } from './CommandPalette'

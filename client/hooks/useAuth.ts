@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { KachowUser, OrgStatus } from "@/lib/auth";
+import { ArchonUser, OrgStatus } from "@/lib/auth";
 
 export function useAuth() {
-  const [user, setUser] = useState<KachowUser | null>(null);
+  const [user, setUser] = useState<ArchonUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +32,7 @@ export function useAuth() {
           setUser(null);
         }
       } catch (err) {
-        console.error("[KA-CHOW] Session check failed:", err);
+        console.error("[Archon] Session check failed:", err);
         setError("Failed to check session");
         setUser(null);
       } finally {
@@ -49,7 +49,7 @@ export function useAuth() {
       setUser(null);
       window.location.href = "/login";
     } catch (err) {
-      console.error("[KA-CHOW] Logout failed:", err);
+      console.error("[Archon] Logout failed:", err);
       setError("Failed to logout");
     }
   };
@@ -77,7 +77,7 @@ export function useOrgStatus() {
           setOrgStatus(data);
         }
       } catch (err) {
-        console.error("[KA-CHOW] Org status check failed:", err);
+        console.error("[Archon] Org status check failed:", err);
       } finally {
         setLoading(false);
       }

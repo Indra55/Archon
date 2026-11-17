@@ -2,7 +2,7 @@ import logging
 from typing import Dict, Any
 from agent.core.neo4j_client import Neo4jClient
 
-logger = logging.getLogger("kachow.core.health")
+logger = logging.getLogger("archon.core.health")
 
 class HealthService:
     def __init__(self):

@@ -12,7 +12,7 @@ from agent.core.llm import invoke_llm
 from agent.prompts.pr_review import DOC_UPDATE_SYSTEM_PROMPT, DOC_UPDATE_PROMPT
 
 load_dotenv()
-logger = logging.getLogger("kachow.core.push")
+logger = logging.getLogger("archon.core.push")
 
 class PushService:
     def __init__(self):

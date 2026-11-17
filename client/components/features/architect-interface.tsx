@@ -10,6 +10,7 @@ import { PipelineProgress } from './architect/pipeline-progress'
 export interface Exchange {
   id: string
   userMessage: string
+  pipelineState?: Record<string, any>
   aiResponse: Array<{
     type: 'text' | 'diagram' | 'decision' | 'fileTree' | 'actions'
     data: any
@@ -40,7 +41,8 @@ const SUGGESTIONS = [
 
 function buildExchangeFromPipelineData(
   userMessage: string,
-  stageData: Record<string, StageData>
+  stageData: Record<string, StageData>,
+  pipelineState: Record<string, any> = {}
 ): Exchange {
   const aiResponse: Exchange['aiResponse'] = []
 
@@ -85,104 +87,7 @@ function buildExchangeFromPipelineData(
     }
 
     if (design.services?.length > 0) {
-      const nodes: any[] = []
-      const edges: any[] = []
-
-      const NODE_WIDTH = 200
-      const NODE_GAP = 40
-      const ROW_GAP = 120
-
-      // Helper to center a row of N items
-      const centerRow = (count: number, y: number) => {
-        const totalWidth = count * NODE_WIDTH + (count - 1) * NODE_GAP
-        const startX = -totalWidth / 2 + NODE_WIDTH / 2
-        return Array.from({ length: count }, (_, i) => ({
-          x: startX + i * (NODE_WIDTH + NODE_GAP),
-          y,
-        }))
-      }
-
-      let currentY = 0
-
-      // Row 0: API Gateway (if present)
-      const gateway = design.api_gateway
-      const hasGateway = gateway && typeof gateway === 'object' && Object.keys(gateway).length > 0
-      if (hasGateway) {
-        nodes.push({
-          id: 'gateway',
-          type: 'gateway',
-          position: { x: -120, y: currentY },
-          data: { label: gateway.name || 'API Gateway' },
-        })
-        currentY += ROW_GAP + 20
-      }
-
-      // Row 1: Services
-      const svcPositions = centerRow(design.services.length, currentY)
-      design.services.forEach((service: any, idx: number) => {
-        const svcId = `svc-${idx}`
-        nodes.push({
-          id: svcId,
-          type: 'service',
-          position: svcPositions[idx],
-          data: {
-            name: service.name || service.service_name || `Service ${idx + 1}`,
-            team: service.language || service.framework || '',
-            health: 'green',
-            apis: service.endpoints?.length || service.communication?.length || 0,
-          },
-        })
-
-        // Gateway → Service edges
-        if (hasGateway) {
-          edges.push({
-            id: `e-gw-${idx}`,
-            source: 'gateway',
-            target: svcId,
-            animated: true,
-            style: { stroke: '#A78BFA', strokeWidth: 1.5 },
-            label: service.communication?.[0] || 'REST',
-            labelStyle: { fill: '#A78BFA', fontSize: 10, fontFamily: 'monospace' },
-          })
-        }
-      })
-
-      currentY += ROW_GAP + 60
-
-      // Row 2: Databases
-      if (design.databases?.length > 0) {
-        const dbPositions = centerRow(design.databases.length, currentY)
-        design.databases.forEach((db: any, idx: number) => {
-          const dbId = `db-${idx}`
-          nodes.push({
-            id: dbId,
-            type: 'database',
-            position: dbPositions[idx],
-            data: { label: db.name || db.engine || db.technology || `DB ${idx + 1}` },
-          })
-
-          // Connect DB to its owning service (or nearest service)
-          const ownerName = db.owned_by || ''
-          const ownerIdx = design.services.findIndex(
-            (s: any) => (s.name || s.service_name || '').toLowerCase() === ownerName.toLowerCase()
-          )
-          const targetSvc = ownerIdx >= 0 ? `svc-${ownerIdx}` : `svc-${Math.min(idx, design.services.length - 1)}`
-
-          edges.push({
-            id: `e-db-${idx}`,
-            source: targetSvc,
-            target: dbId,
-            animated: false,
-            style: { stroke: '#22c55e', strokeWidth: 1.5, strokeDasharray: '5 3' },
-            label: db.engine || '',
-            labelStyle: { fill: '#22c55e', fontSize: 10, fontFamily: 'monospace' },
-          })
-        })
-      }
-
-      if (nodes.length > 0) {
-        aiResponse.push({ type: 'diagram', data: { nodes, edges } })
-      }
+      aiResponse.push({ type: 'diagram', data: { design, projectName: analysis?.project_name } })
     }
 
     if (design.decisions?.length > 0) {
@@ -224,11 +129,12 @@ function buildExchangeFromPipelineData(
   }
 
   // 5. Actions
-  aiResponse.push({ type: 'actions', data: {} })
+  aiResponse.push({ type: 'actions', data: { hasFiles: !!pipelineState.scaffolded_files?.length } })
 
   return {
     id: `exchange-${Date.now()}`,
     userMessage,
+    pipelineState,
     aiResponse,
   }
 }
@@ -239,6 +145,8 @@ export function ArchitectInterface() {
 
   const [exchanges, setExchanges] = useState<Exchange[]>([])
   const [input, setInput] = useState('')
+  const [modifying, setModifying] = useState<Exchange | null>(null)
+  const lastRequest = useRef<any>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [pipelineStage, setPipelineStage] = useState<PipelineStage>('idle')
   const [stageData, setStageData] = useState<Record<string, StageData>>({})
@@ -258,11 +166,13 @@ export function ArchitectInterface() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (input.trim() && !isLoading) {
-      submitQuery(input)
+      submitQuery(input, modifying ? { architecture: modifying.pipelineState, modification: input } : {})
     }
   }
 
-  const submitQuery = useCallback(async (query: string) => {
+  const submitQuery = useCallback(async (query: string, options: any = {}) => {
+    lastRequest.current = { query, options }
+    setModifying(null)
     setIsLoading(true)
     setInput('')
     setErrorMessage(null)
@@ -276,7 +186,8 @@ export function ArchitectInterface() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          requirements: query,
+          requirements: options.modification ? options.architecture?.user_requirements || query : query,
+          ...options,
           ...(projectId && { projectId }),
         }),
       })
@@ -301,8 +212,11 @@ export function ArchitectInterface() {
 
       const decoder = new TextDecoder()
       let buffer = ''
-      const collectedStageData: Record<string, StageData> = {}
+      const collectedStageData: Record<string, StageData> = options.action === 'scaffold' ? {
+        analyze_requirements: options.architecture, design_architecture: options.architecture,
+      } : {}
       let isCompletedLocally = false
+      let failed = false
 
       const processSSELine = (line: string) => {
         const trimmed = line.trim()
@@ -322,24 +236,20 @@ export function ArchitectInterface() {
               setStageData({ ...collectedStageData })
             }
           } else if (eventData.type === 'error') {
+            failed = true
             setErrorMessage(
               eventData.errors?.join(', ') || 'Pipeline error occurred'
             )
             setPipelineStage('error')
           } else if (eventData.type === 'complete') {
             isCompletedLocally = true
-            // First show "complete" state briefly
             setPipelineStage('complete')
 
             // Build the exchange from all collected data
-            const exchange = buildExchangeFromPipelineData(query, collectedStageData)
+            const exchange = buildExchangeFromPipelineData(query, collectedStageData, eventData.state || {})
 
-            // Use a small delay so the progress bar reaches 100% visually
-            setTimeout(() => {
-              setExchanges((prev) => [...prev, exchange])
-              setIsLoading(false)
-              // Don't reset pipelineStage to idle — let the exchanges render
-            }, 800)
+            setExchanges((prev) => [...prev, exchange])
+            setIsLoading(false)
           }
         } catch {
           // Skip malformed JSON
@@ -375,12 +285,10 @@ export function ArchitectInterface() {
         }
       }
 
-      // If stream ended without a 'complete' event and we have data, build exchange
-      if (Object.keys(collectedStageData).length > 0 && !isCompletedLocally) {
-        const exchange = buildExchangeFromPipelineData(query, collectedStageData)
-        setExchanges((prev) => [...prev, exchange])
-        setIsLoading(false)
+      if (!isCompletedLocally && !failed) {
+        throw new Error('The architecture stream ended before completion. Please retry.')
       }
+      setIsLoading(false)
     } catch (err) {
       console.error('Pipeline request failed:', err)
       setErrorMessage(
@@ -390,6 +298,36 @@ export function ArchitectInterface() {
       setIsLoading(false)
     }
   }, [projectId])
+
+  const handleAction = async (action: string, exchange: Exchange) => {
+    if (isLoading) return
+    const state = exchange.pipelineState || {}
+    if (action === 'modify') {
+      setModifying(exchange)
+      setInput('')
+      requestAnimationFrame(() => { inputRef.current?.focus(); inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }) })
+    } else if (action === 'scaffold' && !state.scaffolded_files?.length) {
+      submitQuery(state.user_requirements || exchange.userMessage, { action: 'scaffold', architecture: state })
+    } else {
+      try {
+        let blob: Blob
+        let name: string
+        if (action === 'export') {
+          blob = new Blob([state.blueprint_markdown || JSON.stringify(state, null, 2)], { type: 'text/markdown' })
+          name = 'BLUEPRINT.md'
+        } else {
+          const response = await fetch('/api/architect/archive', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ files: state.scaffolded_files, blueprint: state.blueprint_markdown }) })
+          if (!response.ok) throw new Error((await response.json()).error || 'Download failed')
+          blob = await response.blob()
+          name = 'archon-scaffold.zip'
+        }
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url; link.download = name; link.click()
+        setTimeout(() => URL.revokeObjectURL(url), 1000)
+      } catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Download failed'); setPipelineStage('error') }
+    }
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -412,17 +350,19 @@ export function ArchitectInterface() {
       {/* Sticky Follow-up Input at Top */}
       <div className="sticky top-20 z-40 bg-background/95 backdrop-blur-md border-b border-muted-foreground/20 px-4 md:px-8 py-4 transition-all duration-300">
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+          {modifying && <div className="mb-3 flex items-center justify-between text-xs text-accent"><span>Modifying {modifying.pipelineState?.project_name || 'selected architecture'}</span><button type="button" onClick={() => setModifying(null)}>Cancel</button></div>}
           <div className="flex gap-3 items-end">
             <textarea
               ref={inputRef}
               value={input}
               onChange={handleInputChange}
-              placeholder="Ask a follow-up question..."
+              placeholder={modifying ? 'Describe what to change in this architecture…' : 'Describe another architecture…'}
               className="flex-1 px-4 py-2 bg-card border border-muted-foreground/40 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all duration-300 resize-none font-mono text-sm"
               rows={1}
               disabled={isLoading}
             />
             <button
+              aria-label="Submit architecture request"
               type="submit"
               disabled={isLoading || !input.trim()}
               className="p-2.5 bg-accent text-background rounded-lg hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center flex-shrink-0"
@@ -441,6 +381,7 @@ export function ArchitectInterface() {
       {isLoading && (
         <PipelineProgress
           stage={pipelineStage}
+          action={lastRequest.current?.options?.action || 'design'}
           stageData={stageData}
           errorMessage={errorMessage}
           query={currentQuery}
@@ -453,7 +394,7 @@ export function ArchitectInterface() {
           <div className="max-w-xl mx-auto p-4 rounded-lg bg-destructive/10 border border-destructive/30 space-y-3">
             <p className="text-sm text-destructive font-mono">{errorMessage}</p>
             <button
-              onClick={() => submitQuery(currentQuery)}
+              onClick={() => lastRequest.current && submitQuery(lastRequest.current.query, lastRequest.current.options)}
               className="px-4 py-2 rounded-md text-sm bg-accent text-background font-bold hover:bg-accent/90 transition-all font-mono"
             >
               Retry
@@ -465,8 +406,8 @@ export function ArchitectInterface() {
       {/* Conversation Thread */}
       {exchanges.length > 0 && (
         <div ref={threadRef} className="flex-1 overflow-y-auto py-8">
-          <div className="max-w-[760px] mx-auto px-4 md:px-8">
-            <ConversationThread exchanges={exchanges} />
+          <div className="max-w-[1120px] mx-auto px-4 md:px-8">
+            <ConversationThread exchanges={exchanges} onAction={handleAction} busy={isLoading} />
           </div>
         </div>
       )}

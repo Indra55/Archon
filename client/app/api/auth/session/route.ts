@@ -46,7 +46,7 @@ export async function GET() {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("[KA-CHOW] Session check error:", error);
+    console.error("[Archon] Session check error:", error);
     return new Response(JSON.stringify({ user: null }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

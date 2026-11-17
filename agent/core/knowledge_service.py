@@ -9,7 +9,7 @@ from agent.prompts.knowledge import CHUNK_SUMMARY_PROMPT
 from agent.core.neo4j_client import Neo4jClient
 from agent.core.vector_store import TwinVectorStore
 
-logger = logging.getLogger("kachow.core.knowledge")
+logger = logging.getLogger("archon.core.knowledge")
 
 class KnowledgeService:
     def __init__(self):

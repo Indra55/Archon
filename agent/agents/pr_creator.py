@@ -12,7 +12,7 @@ from typing import Any
 
 from agent.core.github_integration import create_pull_request
 
-logger = logging.getLogger("kachow.agents.pr_creator")
+logger = logging.getLogger("archon.agents.pr_creator")
 
 
 async def create_pr(state: dict[str, Any]) -> dict[str, Any]:

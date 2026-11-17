@@ -61,7 +61,7 @@ export default function OnboardingCompletePage() {
               You're all set!
             </h1>
             <p className="text-muted-foreground">
-              Ready to unleash KaChow
+              Ready to unleash Archon
             </p>
           </div>
 
@@ -87,7 +87,7 @@ export default function OnboardingCompletePage() {
             </div>
 
             <div className="text-center space-y-2">
-              <h2 className="text-2xl font-semibold">Welcome to KaChow!</h2>
+              <h2 className="text-2xl font-semibold">Welcome to Archon!</h2>
               <p className="text-muted-foreground">
                 Your workspace is ready. Start exploring your codebase with AI-powered insights.
               </p>

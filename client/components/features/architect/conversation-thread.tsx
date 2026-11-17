@@ -2,23 +2,18 @@
 
 import { ResponseBlock } from './response-block'
 
-interface Exchange {
-  id: string
-  userMessage: string
-  aiResponse: Array<{
-    type: 'text' | 'diagram' | 'decision' | 'fileTree' | 'actions'
-    data: any
-  }>
-}
+import type { Exchange } from '../architect-interface'
 
 interface ConversationThreadProps {
   exchanges: Exchange[]
-  onAction?: (action: string) => void
+  onAction?: (action: string, exchange: Exchange) => void
+  busy?: boolean
 }
 
 export function ConversationThread({
   exchanges,
   onAction,
+  busy,
 }: ConversationThreadProps) {
   return (
     <div className="space-y-8">
@@ -34,13 +29,14 @@ export function ConversationThread({
           </div>
 
           {/* AI Response - sequence of blocks */}
-          <div className="w-full space-y-4 pr-8">
+          <div className="w-full space-y-4">
             {exchange.aiResponse.map((block, blockIdx) => (
               <div key={blockIdx}>
                 <ResponseBlock
                   type={block.type}
                   data={block.data}
-                  onAction={onAction}
+                  onAction={action => onAction?.(action, exchange)}
+                  busy={busy}
                 />
               </div>
             ))}

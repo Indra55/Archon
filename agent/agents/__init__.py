@@ -1,5 +1,5 @@
 """
-KA-CHOW Reusable Agents
+Archon Reusable Agents
 
 Individual agent nodes that can be composed into any pipeline.
 """

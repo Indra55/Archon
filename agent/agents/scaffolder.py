@@ -23,7 +23,7 @@ from agent.prompts.scaffolding import (
     PROJECT_README_PROMPT,
 )
 
-logger = logging.getLogger("kachow.agents.scaffolder")
+logger = logging.getLogger("archon.agents.scaffolder")
 
 
 def _dump(items: list) -> str:
@@ -182,6 +182,12 @@ async def scaffold_infrastructure(state: dict[str, Any]) -> dict[str, Any]:
                     description=f.get("description", ""),
                 ))
         logger.info(f"  {'✅' if readme_result else '❌'} README: {len(readme_result)} files")
+
+    missing = [svc_names_item for svc_names_item, result in zip(
+        [s.name if hasattr(s, "name") else s.get("name", "unknown") for s in services], results[:-2]
+    ) if isinstance(result, Exception) or not result]
+    if not services or missing or isinstance(compose_result, Exception) or not compose_result or isinstance(readme_result, Exception) or not readme_result:
+        return {"errors": ["Scaffolding incomplete. Retry generation. Missing: " + ", ".join(missing or ["project configuration"])]}
 
     # Summary
     svc_names = [

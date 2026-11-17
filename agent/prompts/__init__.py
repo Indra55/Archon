@@ -1,1 +1,1 @@
-"""KA-CHOW Prompts — organized by domain."""
+"""Archon Prompts — organized by domain."""

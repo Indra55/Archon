@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 load_dotenv(env_path)
 
-logger = logging.getLogger("kachow.core.neo4j")
+logger = logging.getLogger("archon.core.neo4j")
 
 class Neo4jClient:
     def __init__(self):

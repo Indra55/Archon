@@ -1,17 +1,7 @@
-import { getGithubAuthUrl, GITHUB_CONFIG } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { getGithubAuthUrl } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  try {
-    // Validate GitHub config
-    if (!GITHUB_CONFIG.clientId) {
-      return new Response("GitHub Client ID not configured", { status: 500 });
-    }
-
-    const authUrl = getGithubAuthUrl();
-    redirect(authUrl);
-  } catch (error) {
-    console.error("[v0] GitHub auth route error:", error);
-    return new Response("Authentication failed", { status: 500 });
-  }
+export async function GET(request: NextRequest) {
+  const joinCode = request.nextUrl.searchParams.get("join_code") || undefined;
+  return NextResponse.redirect(getGithubAuthUrl(joinCode));
 }

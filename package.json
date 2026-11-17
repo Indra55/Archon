@@ -1,4 +1,11 @@
 {
+  "scripts": {
+    "setup:env": "node scripts/setup-env.mjs",
+    "db:up": "docker compose up -d --wait",
+    "db:stop": "docker compose stop",
+    "dev": "node scripts/dev.mjs",
+    "build": "npm --prefix client run build"
+  },
   "dependencies": {
     "@dagrejs/dagre": "github:dagrejs/dagre"
   }

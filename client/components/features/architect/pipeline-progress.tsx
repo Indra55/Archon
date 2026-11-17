@@ -63,15 +63,12 @@ const STAGES: StageConfig[] = [
     },
 ]
 
-function getStageIndex(stage: PipelineStage): number {
-    return STAGES.findIndex((s) => s.key === stage)
-}
-
 interface PipelineProgressProps {
     stage: PipelineStage
     stageData: Record<string, any>
     errorMessage: string | null
     query: string
+    action?: string
 }
 
 export function PipelineProgress({
@@ -79,8 +76,10 @@ export function PipelineProgress({
     stageData,
     errorMessage,
     query,
+    action = 'design',
 }: PipelineProgressProps) {
-    const currentIndex = getStageIndex(stage)
+    const stages = STAGES.filter(s => action === 'scaffold' ? s.key === 'scaffold_infrastructure' : ['analyze_requirements', 'design_architecture', 'generate_blueprint'].includes(s.key))
+    const currentIndex = stages.findIndex(s => s.key === stage)
 
     return (
         <div className="w-full px-4 md:px-8 py-8">
@@ -115,7 +114,7 @@ export function PipelineProgress({
 
                 {/* Pipeline stages */}
                 <div className="space-y-1">
-                    {STAGES.map((s, idx) => {
+                    {stages.map((s, idx) => {
                         const Icon = s.icon
                         const isActive = s.key === stage
                         const isCompleted = currentIndex > idx || stage === 'complete'
@@ -202,7 +201,7 @@ export function PipelineProgress({
                                         ? '5%'
                                         : stage === 'complete'
                                             ? '100%'
-                                            : `${((currentIndex + 1) / STAGES.length) * 100}%`,
+                                            : `${((currentIndex + 1) / stages.length) * 100}%`,
                             }}
                         />
                     </div>

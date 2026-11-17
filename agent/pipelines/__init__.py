@@ -1,1 +1,1 @@
-"""KA-CHOW Pipelines — one LangGraph per feature."""
+"""Archon Pipelines — one LangGraph per feature."""

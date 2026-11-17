@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: "Internal server error", message: err.message });
 });
 
-// KA-CHOW API v1 Routes
+// Archon API v1 Routes
 app.use("/api/v1/org", require("./routes/org"))
 app.use("/api/v1/knowledge", require("./routes/knowledge"))
 app.use("/api/v1/admin", require("./routes/admin"))

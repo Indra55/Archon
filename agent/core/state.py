@@ -1,5 +1,5 @@
 """
-KA-CHOW Core — Shared State Models
+Archon Core — Shared State Models
 
 Base state and reusable sub-models used across multiple pipelines.
 Feature-specific states extend BaseAgentState.

@@ -7,7 +7,7 @@ from agent.core.neo4j_client import Neo4jClient
 from agent.core.retriever import HybridRetriever
 from agent.core.llm import invoke_llm
 
-logger = logging.getLogger("kachow.qa_service")
+logger = logging.getLogger("archon.qa_service")
 
 QA_SYSTEM_PROMPT = """
 You are an expert codebase answering agent. You will be provided with a user's question, 

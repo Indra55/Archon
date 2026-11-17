@@ -1,5 +1,5 @@
 """
-KA-CHOW Architecture Agent — CLI Entry Point
+Archon Architecture Agent — CLI Entry Point
 
 Usage:
     python -m agent.main "Build a real-time chat app with auth, notifications..."
@@ -26,7 +26,7 @@ logging.basicConfig(
     format="%(asctime)s | %(name)-20s | %(levelname)-7s | %(message)s",
     datefmt="%H:%M:%S",
 )
-logger = logging.getLogger("kachow")
+logger = logging.getLogger("archon")
 
 
 def print_banner():

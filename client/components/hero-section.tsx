@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { ScrambleTextOnHover } from "@/components/scramble-text"
 import { SplitFlapText, SplitFlapMuteToggle, SplitFlapAudioProvider } from "@/components/split-flap-text"
 import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
@@ -74,14 +73,22 @@ export function HeroSection() {
       <div ref={contentRef} className="flex-1 w-full relative z-10 flex flex-col items-end justify-center pt-40 pr-12">
         <SplitFlapAudioProvider>
           <div className="relative">
-            <SplitFlapText text="KA-CHOW" speed={80} />
+            <SplitFlapText text="Archon" speed={80} />
             <div className="mt-4">
               <SplitFlapMuteToggle />
             </div>
           </div>
         </SplitFlapAudioProvider>
 
-        <div className="mt-16 flex flex-col md:flex-row items-center gap-6 justify-end pr-12">
+        <div className="mt-10 max-w-lg text-right">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">Your codebase, connected.</p>
+          <p className="mt-4 font-mono text-sm text-muted-foreground leading-relaxed">
+            Archon turns code and documentation into connected engineering knowledge.
+            Explore dependencies, ask questions about your codebase, and turn requirements into architecture blueprints.
+          </p>
+        </div>
+
+        <div className="mt-8 flex flex-col md:flex-row items-center gap-6 justify-end pr-12">
           <Link
             href="/signup"
             className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-background font-mono text-xs uppercase tracking-widest rounded hover:bg-accent/90 transition-all duration-200 shadow-lg hover:shadow-xl hover:shadow-accent/30"
@@ -90,7 +97,7 @@ export function HeroSection() {
             <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
           <a
-            href="#demo"
+            href="#signals"
             className="group inline-flex items-center gap-3 border border-foreground/20 px-8 py-4 font-mono text-xs uppercase tracking-widest text-foreground hover:border-accent hover:text-accent transition-all duration-200 rounded"
           >
             <span>Learn More</span>

@@ -96,7 +96,7 @@ export function ColophonSection() {
           </div>
           <div className="pt-4 border-t border-border/30 mt-6">
             <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
-              KA-CHOW 2026 | The Autonomous Engineering Brain
+              Archon 2026 | The Autonomous Engineering Brain
             </p>
             <p className="font-mono text-xs text-accent mt-2 font-semibold">
               Your intelligent system knowledge companion
@@ -111,7 +111,7 @@ export function ColophonSection() {
         className="mt-24 pt-8 border-t border-border/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-          © 2026 KA-CHOW. Intelligent Engineering.
+          © 2026 Archon. Intelligent Engineering.
         </p>
         <p className="font-mono text-[10px] text-muted-foreground">Transform fragmented knowledge into unified intelligence.</p>
       </div>

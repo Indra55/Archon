@@ -1,5 +1,5 @@
 -- ============================================================
--- KA-CHOW Database Schema
+-- Archon Database Schema
 -- ============================================================
 
 -- Extensions
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS users (
     last_name               varchar(100),
     bio                     text,
 
-    -- KA-CHOW RBAC
+    -- Archon RBAC
     kachow_role             varchar(50) DEFAULT 'engineer',  -- admin / engineer / viewer
     team                    varchar(255),                     -- assigned by admin
     org_id                  uuid REFERENCES orgs(id),

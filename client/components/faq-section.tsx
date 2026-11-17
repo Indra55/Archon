@@ -33,9 +33,9 @@ export function FaqSection() {
 
   const faqs = [
     {
-      question: 'How does KA-CHOW integrate with our existing tools?',
+      question: 'How does Archon integrate with our existing tools?',
       answer:
-        'KA-CHOW integrates with popular version control systems (GitHub, GitLab), CI/CD platforms (GitHub Actions, GitLab CI), and documentation tools. Setup typically takes less than 5 minutes through our web interface.',
+        'Archon integrates with popular version control systems (GitHub, GitLab), CI/CD platforms (GitHub Actions, GitLab CI), and documentation tools. Setup typically takes less than 5 minutes through our web interface.',
     },
     {
       question: 'What data do you store and how is it secured?',
@@ -43,9 +43,9 @@ export function FaqSection() {
         'We only store metadata and architecture relationships, not your source code. All data is encrypted at rest and in transit. We comply with SOC 2, GDPR, and HIPAA standards. Your data never leaves your infrastructure with our on-premise option.',
     },
     {
-      question: 'Can KA-CHOW work with monolithic architectures?',
+      question: 'Can Archon work with monolithic architectures?',
       answer:
-        'Absolutely! KA-CHOW works with any architecture pattern - monoliths, microservices, serverless, or hybrid. It analyzes service dependencies, data flows, and integration points regardless of your deployment model.',
+        'Absolutely! Archon works with any architecture pattern - monoliths, microservices, serverless, or hybrid. It analyzes service dependencies, data flows, and integration points regardless of your deployment model.',
     },
     {
       question: 'How long does it take to build the initial knowledge graph?',
@@ -60,7 +60,7 @@ export function FaqSection() {
     {
       question: 'Can I export reports and share architecture insights?',
       answer:
-        'Yes, KA-CHOW generates detailed reports on architecture health, dependency analysis, and recommendations. You can export as PDF, CSV, or create shareable architecture visualizations for stakeholders.',
+        'Yes, Archon generates detailed reports on architecture health, dependency analysis, and recommendations. You can export as PDF, CSV, or create shareable architecture visualizations for stakeholders.',
     },
   ]
 
@@ -72,7 +72,7 @@ export function FaqSection() {
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">Questions?</span>
           <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">Frequently Asked</h2>
           <p className="mt-6 font-mono text-sm text-muted-foreground">
-            Everything you need to know about KA-CHOW. Can't find the answer? Contact our support team.
+            Everything you need to know about Archon. Can't find the answer? Contact our support team.
           </p>
         </div>
 
@@ -114,10 +114,10 @@ export function FaqSection() {
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:support@ka-chow.ai"
+              href="https://github.com/indra55/archon/issues"
               className="px-6 py-2 border border-accent/30 text-foreground font-mono text-xs uppercase tracking-widest rounded hover:border-accent hover:text-accent transition-colors"
             >
-              Email Us
+              Contact Us
             </a>
             <a
               href="#contact"

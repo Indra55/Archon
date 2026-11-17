@@ -46,7 +46,7 @@ export function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        'KA-CHOW transformed how our team thinks about architecture. We went from scattered documentation to a living knowledge graph that actually guides our decisions.',
+        'Archon transformed how our team thinks about architecture. We went from scattered documentation to a living knowledge graph that actually guides our decisions.',
       author: 'Sarah Chen',
       role: 'VP of Engineering',
       company: 'TechCorp',

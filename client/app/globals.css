@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* KA-CHOW: AI Engineering Brain - Dark tech aesthetic with violet/purple accents */
+/* Archon: AI Engineering Brain - Dark tech aesthetic with violet/purple accents */
 :root {
   --background: oklch(0.06 0 0);
   --foreground: oklch(0.97 0 0);

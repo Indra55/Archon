@@ -1,5 +1,7 @@
 # Node.js PostgreSQL Authentication System
 
+For the current Archon application and local database setup, use the [project README](../README.md). The notes below describe the older authentication-only setup.
+
 A secure authentication system built with Node.js, Express, PostgreSQL and Passport.js.
 
 ## Features

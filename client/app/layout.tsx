@@ -22,7 +22,7 @@ const jetBrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "KA-CHOW — Universal Dashboard",
+  title: "Archon — Universal Dashboard",
   description: "AI-powered engineering intelligence platform",
   icons: {
     icon: [

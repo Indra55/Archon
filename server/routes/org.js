@@ -7,7 +7,7 @@ const { checkAuthenticated, checkAdmin } = require("../middleware/auth");
 
 /**
  * Generate a random, human-readable join code (like MS Teams)
- * Format: 3 letters + 4 digits (e.g. KCH-1234)
+ * Format: 3 letters + 4 digits (e.g. ARC-1234)
  */
 function generateJoinCode() {
     const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // no I, O to avoid confusion
@@ -85,7 +85,7 @@ router.post("/setup", async (req, res) => {
             headers: {
                 Authorization: `Bearer ${github_access_token}`,
                 Accept: "application/vnd.github.v3+json",
-                "User-Agent": "KA-CHOW",
+                "User-Agent": "Archon",
             },
         });
 
@@ -100,7 +100,7 @@ router.post("/setup", async (req, res) => {
             headers: {
                 Authorization: `Bearer ${github_access_token}`,
                 Accept: "application/vnd.github.v3+json",
-                "User-Agent": "KA-CHOW",
+                "User-Agent": "Archon",
             },
         });
 
