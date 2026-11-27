@@ -14,12 +14,11 @@ if [[ -n $ip ]]; then origin=(--resolve "$APP_HOST:443:$ip" --resolve "$APP_HOST
 response=$(mktemp)
 trap 'rm -f -- "$response"' EXIT
 curl_args=(--noproxy '*' --silent --show-error --connect-timeout 5 --max-time 12)
-authenticated() {
-    curl "${curl_args[@]}" "${origin[@]}" --config \
-        <(printf 'user = "%s:%s"\n' "$OPERATOR_USER" "$OPERATOR_PASSWORD") "$@"
-}
-anonymous() {
-    curl "${curl_args[@]}" "${origin[@]}" "$@"
+request() {
+    curl "${curl_args[@]}" "${origin[@]}" -D "$response" "$@" || return
+    if grep -iq '^www-authenticate:[[:space:]]*basic' "$response"; then
+        fail 'Received an HTTP Basic authentication challenge.'
+    fi
 }
 expect() {
     [[ $1 == "$2" ]] || fail "$3 returned HTTP $1 (expected $2)."
@@ -40,20 +39,24 @@ if addresses != {sys.argv[2]}:
 PYTHON
 }
 expect_dns "$APP_HOST"
-expect "$(anonymous -o /dev/null -w '%{http_code}' "http://$APP_HOST/")" 301 'HTTP redirect'
+expect "$(request -o /dev/null -w '%{http_code}' "http://$APP_HOST/")" 301 'HTTP redirect'
 public_pages=(/ /docs /login)
-if [[ $app == holonet ]]; then public_pages+=(/api/docs); else public_pages+=(/demo); fi
+if [[ $app == holonet ]]; then
+    public_pages+=(/api/docs /services/new)
+else
+    public_pages+=(/demo /signup /setup /api/auth/session /api/org/status)
+fi
 for page in "${public_pages[@]}"; do
-    expect "$(anonymous -D "$response" -o /dev/null -w '%{http_code}' "$host$page")" 200 "Public page $page"
-    if grep -iq '^www-authenticate:' "$response"; then fail "Public page $page asks for operator credentials."; fi
+    expect "$(request -o /dev/null -w '%{http_code}' "$host$page")" 200 "Public route $page"
 done
 
 if [[ $app == holonet ]]; then
     oauth=/api/auth/github
-    operator_action=/api/services/create_service
+    expect "$(request -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' \
+        --data '{}' "$host/api/services/create_service")" 401 'Service creation without a Holonet session'
     webhook_code=401
     webhook=/api/webhooks/00000000-0000-0000-0000-000000000000
-    authenticated --fail "$host/health" | grep -q '"status":"ok"'
+    request --fail "$host/health" | grep -q '"status":"ok"'
     wildcard_host=deployment-probe-$(date +%s).$APPS_DOMAIN
     expect_dns "$wildcard_host"
     wildcard_origin=()
@@ -62,19 +65,16 @@ if [[ $app == holonet ]]; then
         "https://$wildcard_host/")" 404 'Unassigned deployment hostname'
 else
     oauth=/backend/auth/github
-    operator_action=/api/org/status
+    expect "$(request -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' \
+        --data '{}' "$host/api/org/status")" 400 'Workspace setup validation'
     webhook_code=403
     webhook=/api/v1/webhook/github
-    authenticated --fail "$host/backend/health" | grep -q '"status":"ok"'
-    authenticated --fail "$host/agent/api/v1/health" | grep -q '"openrouter_configured":true'
+    request --fail "$host/backend/health" | grep -q '"status":"ok"'
+    request --fail "$host/agent/api/v1/health" | grep -q '"openrouter_configured":true'
 fi
 
-expect "$(anonymous -D "$response" -o /dev/null -w '%{http_code}' \
-    -H 'Content-Type: application/json' --data '{}' "$host$operator_action")" 401 'Operator action'
-grep -iq '^www-authenticate: basic ' "$response" || fail 'Missing operator challenge on protected action.'
-expect "$(anonymous -D "$response" -o /dev/null -w '%{http_code}' "$host$oauth")" 302 'GitHub OAuth initiation'
+expect "$(request -o /dev/null -w '%{http_code}' "$host$oauth")" 302 'GitHub OAuth initiation'
 grep -iq '^location: https://github.com/login/oauth/authorize' "$response" || fail 'Missing GitHub OAuth redirect.'
-expect "$(curl "${curl_args[@]}" "${origin[@]}" -D "$response" -o /dev/null -w '%{http_code}' \
+expect "$(request -o /dev/null -w '%{http_code}' \
     -H 'Content-Type: application/json' -H 'X-GitHub-Event: ping' --data '{}' "$host$webhook")" "$webhook_code" 'Unsigned webhook'
-if grep -iq '^www-authenticate:' "$response"; then fail 'Webhook is behind the operator gate.'; fi
-printf '%s passed HTTPS, public UI, operator action, health, OAuth initiation, and unsigned webhook checks (%s).\n' "$app" "${ip:-public DNS}"
+printf '%s passed HTTPS, public UI, app access, health, OAuth initiation, and unsigned webhook checks (%s).\n' "$app" "${ip:-public DNS}"

@@ -27,12 +27,12 @@ if [[ -e $state/hostnames && $(<"$state/hostnames") != "$identity" ]]; then
     fail "The installed hostnames are recorded in $state/hostnames. Use a separate origin for different hostnames."
 fi
 
-if ! dpkg-query -W -f='${db:Status-Abbrev}\n' nginx apache2-utils certbot \
+if ! dpkg-query -W -f='${db:Status-Abbrev}\n' nginx certbot \
     python3-certbot-dns-cloudflare docker.io docker-compose-v2 ca-certificates curl git unzip 2>/dev/null |
-    awk '$1 == "ii" {count++} END {exit count != 10}'; then
+    awk '$1 == "ii" {count++} END {exit count != 9}'; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -o Acquire::Retries=3
-    apt-get install -y -o DPkg::Lock::Timeout=120 -o Acquire::Retries=3 nginx apache2-utils certbot python3-certbot-dns-cloudflare \
+    apt-get install -y -o DPkg::Lock::Timeout=120 -o Acquire::Retries=3 nginx certbot python3-certbot-dns-cloudflare \
         docker.io docker-compose-v2 ca-certificates curl git unzip
 fi
 systemctl enable --now docker nginx
@@ -53,9 +53,6 @@ fi
 # shellcheck disable=SC1091
 source "$state/secrets.env"
 
-printf '%s\n' "$OPERATOR_PASSWORD" | htpasswd -inB "$OPERATOR_USER" > "$state/operators.new"
-chown root:www-data "$state/operators.new"
-chmod 0640 "$state/operators.new"
 printf 'dns_cloudflare_api_token = %s\n' "$CLOUDFLARE_API_TOKEN" > "$state/cloudflare.ini"
 domains=(-d "$APP_HOST")
 if [[ $app == holonet ]]; then domains+=(-d "*.$APPS_DOMAIN"); fi
@@ -120,6 +117,5 @@ if ! nginx -t || ! systemctl reload nginx; then
     fail 'Nginx rejected the new configuration.'
 fi
 rm -f "$nginx_backup"
-mv -T "$state/operators.new" "$state/operators"
 printf '%s\n' "$identity" > "$state/hostnames"
 printf 'Installed %s in %s. Verify HTTPS before publishing DNS.\n' "$app" "$release"

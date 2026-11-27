@@ -18,9 +18,10 @@ load_config() {
         key=${line%%=*}
         case $key in
             AWS_REGION|STACK_NAME|SSH_KEY_NAME|SSH_PRIVATE_KEY|ADMIN_CIDR|INSTANCE_TYPE|DISK_GIB|\
-            APP_HOST|APPS_DOMAIN|DNS_ZONE|ACME_EMAIL|CLOUDFLARE_API_TOKEN|OPERATOR_USER|OPERATOR_PASSWORD|\
+            APP_HOST|APPS_DOMAIN|DNS_ZONE|ACME_EMAIL|CLOUDFLARE_API_TOKEN|\
             GITHUB_CLIENT_ID|GITHUB_CLIENT_SECRET|OPENROUTER_API|OPENROUTER_MODEL|GITHUB_TOKEN|GITHUB_REPO|GITHUB_BRANCH)
                 printf -v "$key" '%s' "${line#*=}" ;;
+            OPERATOR_USER|OPERATOR_PASSWORD) ;; # Accepted in existing private configs.
             *) fail "Unrecognized config key: $key" ;;
         esac
     done < "$file"
@@ -49,9 +50,6 @@ validate_app_config() {
     fi
     [[ ${ACME_EMAIL:-} =~ ^[a-zA-Z0-9._+%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]] ||
         fail 'Set ACME_EMAIL to your certificate contact email.'
-    [[ ${OPERATOR_USER:-} =~ ^[a-zA-Z0-9._-]+$ ]] || fail 'Set OPERATOR_USER.'
-    [[ ${OPERATOR_PASSWORD:-} =~ ^[a-zA-Z0-9_.~@+-]{16,72}$ ]] ||
-        fail 'Set OPERATOR_PASSWORD to 16–72 letters, digits, or ._~@+- characters.'
     for key in CLOUDFLARE_API_TOKEN GITHUB_CLIENT_ID GITHUB_CLIENT_SECRET; do
         value=${!key:-}
         [[ $value =~ ^[A-Za-z0-9_.~-]+$ ]] || fail "Set $key."
