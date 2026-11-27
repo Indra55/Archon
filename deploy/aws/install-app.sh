@@ -47,7 +47,7 @@ if [[ -d $previous ]]; then
         docker image tag "archon-$component" "archon-previous-$component"
     done
 fi
-compose "$release" build
+compose "$release" --parallel 1 build
 if ! compose "$release" up --detach --no-build --wait --wait-timeout 180 ||
     ! (wait_http http://127.0.0.1:3100/ && wait_http http://127.0.0.1:5555/health &&
        wait_http http://127.0.0.1:8000/api/v1/knowledge/health); then

@@ -1,6 +1,6 @@
 # Deploy Archon on AWS
 
-This workflow installs Next.js, the Express API, the Python agent, PostgreSQL with pgvector, and Neo4j on a dedicated Ubuntu EC2 instance. The default is `t3.medium` with a 60 GiB encrypted gp3 disk in `ap-south-1`. The CloudFormation stack provisions an Elastic IP, a public subnet and security group, operator-restricted SSH, and IMDSv2. Nginx serves HTTPS and asks for operator credentials. The signed GitHub webhook endpoint is public. Certbot uses Cloudflare DNS-01 and reloads Nginx on renewal.
+This workflow installs Next.js, the Express API, the Python agent, PostgreSQL with pgvector, and Neo4j on a dedicated Ubuntu EC2 instance. The default is `t3.medium` with a 60 GiB encrypted gp3 disk in `ap-south-1`. The CloudFormation stack provisions an Elastic IP, a public subnet and security group, operator-restricted SSH, and IMDSv2. Nginx serves the landing page, docs, demo, GitHub sign-in, and the signed webhook endpoint over public HTTPS. Workspace setup and AI requests require operator credentials. Certbot uses Cloudflare DNS-01 and reloads Nginx on renewal.
 
 ## One-time setup
 
@@ -50,7 +50,7 @@ Fill the blank values. Generate a unique operator password with `openssl rand -h
 
 ## Verify connected features
 
-1. Open `https://archon.hitanshu.xyz/setup`, enter the operator credentials, and use a small GitHub repository you control and a scoped PAT. Set up the organization, then sign in through GitHub. Verify a normal session reaches the dashboard.
+1. Open `https://archon.hitanshu.xyz/setup` and use a small GitHub repository you control and a scoped PAT. Enter the operator credentials when you submit the form. After setup, sign in through GitHub and verify that your session reaches the dashboard.
 2. Generate a small architecture and download its scaffold ZIP. This exercises the actual OpenRouter workflow. Set `OPENROUTER_MODEL` to a model your key can use if the default is unavailable.
 3. Add `GITHUB_TOKEN`, `GITHUB_REPO=owner/repo` and `GITHUB_BRANCH` to the private config and rerun `prepare` if you want CLI ingestion. Use the repo's exact GitHub name and an OpenRouter key with access to the configured chat model and `thenlper/gte-base` embeddings.
 4. On the origin, run the commands below. Inspect the real repository name and citations in Codebase Q&A and the Knowledge Graph.

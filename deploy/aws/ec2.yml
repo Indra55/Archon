@@ -13,7 +13,7 @@ Parameters:
   InstanceType:
     Type: String
     Default: t3.medium
-    AllowedValues: [t3.medium, t3.large, t3.xlarge, t3.2xlarge]
+    AllowedValues: [t3.small, t3.medium, t3.large, t3.xlarge, t3.2xlarge, c7i-flex.large, m7i-flex.large]
   DiskGiB:
     Type: Number
     Default: 60
@@ -21,6 +21,9 @@ Parameters:
   UbuntuAmi:
     Type: AWS::EC2::Image::Id
     Description: Pinned Canonical Ubuntu 24.04 amd64 AMI for this stack.
+
+Conditions:
+  UsesCpuCredits: !Equals [!Select [0, !Split ['.', !Ref InstanceType]], t3]
 
 Resources:
   Vpc:
@@ -80,8 +83,10 @@ Resources:
         HttpPutResponseHopLimit: 1
         HttpEndpoint: enabled
         InstanceMetadataTags: disabled
-      CreditSpecification:
-        CPUCredits: standard
+      CreditSpecification: !If
+        - UsesCpuCredits
+        - CPUCredits: standard
+        - !Ref AWS::NoValue
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
