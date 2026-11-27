@@ -2,6 +2,10 @@
 
 Engineering dashboard with repository indexing, a code knowledge graph, codebase Q&A, and architecture generation. Runs a Next.js frontend, Express API, Python agent, PostgreSQL with pgvector, and Neo4j.
 
+## AWS deployment
+
+[Deploy on EC2 with Cloudflare DNS and Certbot](deploy/aws/README.md).
+
 ## Local setup
 
 Requires Node.js 20+, Python 3.12, uv, and Docker Compose.

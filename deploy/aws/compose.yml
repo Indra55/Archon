@@ -1,0 +1,79 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: archon
+      POSTGRES_DB: archon
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?required}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD, pg_isready, -h, 127.0.0.1, -U, archon, -d, archon]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+  neo4j:
+    image: neo4j:5-community
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?required}
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 256m
+    volumes:
+      - neo4j:/data
+    tmpfs:
+      - /tmp:exec,mode=1777
+    healthcheck:
+      test: [CMD, wget, -q, --spider, "http://127.0.0.1:7474"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+  api:
+    build:
+      context: ../..
+      dockerfile: deploy/aws/archon.Dockerfile
+      target: api
+    restart: unless-stopped
+    env_file: ../../api.env
+    ports:
+      - "127.0.0.1:5555:5555"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      agent:
+        condition: service_started
+  agent:
+    build:
+      context: ../..
+      dockerfile: deploy/aws/archon.Dockerfile
+      target: agent
+    restart: unless-stopped
+    env_file: ../../agent.env
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+  web:
+    build:
+      context: ../..
+      dockerfile: deploy/aws/archon.Dockerfile
+      target: web
+      args:
+        PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?required}
+    restart: unless-stopped
+    environment:
+      AGENT_API_URL: http://agent:8000
+      ARCHON_API_URL: http://api:5555
+    ports:
+      - "127.0.0.1:3100:3000"
+    depends_on:
+      api:
+        condition: service_started
+volumes:
+  postgres:
+  neo4j:

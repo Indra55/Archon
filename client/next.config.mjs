@@ -10,7 +10,7 @@ const nextConfig = {
     return [
       {
         source: '/api/knowledge/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5555'}/knowledge/:path*`,
+        destination: `${process.env.ARCHON_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5555'}/knowledge/:path*`,
       },
     ]
   },

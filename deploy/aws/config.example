@@ -1,0 +1,23 @@
+# Copy to a private file, chmod 600, and fill in the empty values.
+# Literal NAME=value lines. Leave values unquoted.
+AWS_REGION=ap-south-1
+STACK_NAME=archon-production
+SSH_KEY_NAME=archon-deploy
+SSH_PRIVATE_KEY=
+ADMIN_CIDR=
+INSTANCE_TYPE=t3.medium
+DISK_GIB=60
+DNS_ZONE=hitanshu.xyz
+APP_HOST=archon.hitanshu.xyz
+ACME_EMAIL=
+CLOUDFLARE_API_TOKEN=
+OPERATOR_USER=operator
+OPERATOR_PASSWORD=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+OPENROUTER_API=
+OPENROUTER_MODEL=
+# Optional pair for CLI ingestion and webhook-driven repository updates.
+GITHUB_TOKEN=
+GITHUB_REPO=
+GITHUB_BRANCH=main
